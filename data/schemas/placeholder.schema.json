@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://micene.local/schemas/placeholder.schema.json",
+  "title": "Micene Step 12 PLACEHOLDER Registry",
+  "type": "object",
+  "required": ["schemaVersion", "profile", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "profile": { "const": "DEBUG_DISPLAY" },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "featureId", "assetId", "name", "status", "placeholder", "metricStatus",
+          "placeholderReason", "replacementRequirement", "displayTransform", "temporalStates",
+          "sources", "decisionIds", "confidenceGrade", "epistemicKind", "publicationClass",
+          "workflowStatus", "releaseEligible", "primitiveType", "materialKey", "selectable"
+        ],
+        "properties": {
+          "featureId": { "type": "string", "pattern": "^P0-PH-[A-Z0-9-]+$" },
+          "assetId": { "type": "string", "pattern": "^ASSET-P0-PH-[A-Z0-9-]+$" },
+          "name": {
+            "type": "object",
+            "required": ["it", "en"],
+            "additionalProperties": false,
+            "properties": { "it": { "type": "string", "minLength": 1 }, "en": { "type": "string", "minLength": 1 } }
+          },
+          "status": { "const": "PLACEHOLDER" },
+          "placeholder": { "const": true },
+          "metricStatus": { "const": "M0" },
+          "placeholderReason": { "type": "string", "minLength": 10 },
+          "replacementRequirement": { "type": "string", "minLength": 10 },
+          "displayTransform": {
+            "type": "object",
+            "required": ["space", "position", "rotation", "scale"],
+            "additionalProperties": false,
+            "properties": {
+              "space": { "const": "DEBUG_DISPLAY" },
+              "position": { "$ref": "#/$defs/vec3" },
+              "rotation": { "$ref": "#/$defs/vec3" },
+              "scale": { "$ref": "#/$defs/vec3" }
+            }
+          },
+          "temporalStates": { "type": "array", "items": { "enum": ["COMMON", "NOW", "REM", "MOD", "1250", "CMP", "HYP"] }, "minItems": 1 },
+          "sources": { "type": "array", "maxItems": 0 },
+          "decisionIds": { "type": "array", "maxItems": 0 },
+          "confidenceGrade": { "type": "null" },
+          "epistemicKind": { "type": "null" },
+          "publicationClass": { "enum": ["PROVISIONAL", "DEMO"] },
+          "workflowStatus": { "enum": ["RAW", "STAGING", "VALIDATED"] },
+          "releaseEligible": { "const": false },
+          "primitiveType": { "enum": ["ground", "grid", "axis", "box", "cylinder", "sphere", "path", "seam"] },
+          "materialKey": { "enum": ["neutral", "magenta", "cyan", "yellow", "axis", "grid"] },
+          "selectable": { "type": "boolean" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    }
+  }
+}

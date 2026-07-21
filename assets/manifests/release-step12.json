@@ -1,0 +1,17 @@
+{
+  "releaseId": "STEP12-PLACEHOLDER-1",
+  "schemaVersion": "1.0.0",
+  "registry": "data/assets/placeholders.json",
+  "profile": "DEBUG_DISPLAY",
+  "allowedPublicationClasses": ["PROVISIONAL", "DEMO"],
+  "forbiddenPublicationClasses": ["DEFINITIVE", "NON_PUBLIC", "AWAITING_AUTH"],
+  "assetIds": [
+    "ASSET-P0-PH-PLANE-001", "ASSET-P0-PH-GRID-001", "ASSET-P0-PH-AXES-001",
+    "ASSET-P0-PH-ORIGIN-LG01", "ASSET-P0-PH-AP01-VOL", "ASSET-P0-PH-LGWB-VOL",
+    "ASSET-P0-PH-LGEC-VOL", "ASSET-P0-PH-LG01-VOL", "ASSET-P0-PH-IR01-VOL",
+    "ASSET-P0-PH-SEAM-P1"
+  ],
+  "cachePolicy": "precache",
+  "containsInstitutionalAssets": false,
+  "containsPersonalData": false
+}

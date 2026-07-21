@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "1.0.0",
+  "profile": "DEBUG_DISPLAY",
+  "records": [
+    {
+      "featureId": "P0-PH-PLANE-001",
+      "assetId": "ASSET-P0-PH-PLANE-001",
+      "name": { "it": "Piano diagnostico", "en": "Diagnostic plane" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "Non è disponibile un DTM locale validato per lo spazio P0.",
+      "replacementRequirement": "DTM NOW validato, autorizzato e trasformato in MYS-LRF.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, 0, 0], "rotation": [0, 0, 0], "scale": [28, 24, 1] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "PROVISIONAL", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "ground", "materialKey": "neutral", "selectable": false
+    },
+    {
+      "featureId": "P0-PH-GRID-001",
+      "assetId": "ASSET-P0-PH-GRID-001",
+      "name": { "it": "Griglia tecnica M0", "en": "M0 technical grid" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "La rete metrica M3 e le coordinate LG01 non sono materializzate.",
+      "replacementRequirement": "Rete M3, origine LG01 e trasformazione controllata approvate.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, 0, 0.01], "rotation": [0, 0, 0], "scale": [28, 24, 1] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "DEMO", "workflowStatus": "VALIDATED", "releaseEligible": false,
+      "primitiveType": "grid", "materialKey": "grid", "selectable": false
+    },
+    {
+      "featureId": "P0-PH-AXES-001",
+      "assetId": "ASSET-P0-PH-AXES-001",
+      "name": { "it": "Assi semantici X/Y/Z", "en": "Semantic X/Y/Z axes" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "Gli assi sono definiti ma l'origine metrica reale non è materializzata.",
+      "replacementRequirement": "Materializzazione M3 dell'origine LG01 con controlli topografici.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, 0, 0.03], "rotation": [0, 0, 0], "scale": [4, 4, 4] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "DEMO", "workflowStatus": "VALIDATED", "releaseEligible": false,
+      "primitiveType": "axis", "materialKey": "axis", "selectable": false
+    },
+    {
+      "featureId": "P0-PH-ORIGIN-LG01",
+      "assetId": "ASSET-P0-PH-ORIGIN-LG01",
+      "name": { "it": "Origine semantica LG01", "en": "LG01 semantic origin" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "E₀, N₀ e H₀ sono NULL; LG01 è soltanto un'origine semantica.",
+      "replacementRequirement": "Coordinate LG01 materializzate in M3 e verbale di controllo.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, 0, 0.7], "rotation": [0, 0, 0], "scale": [0.8, 0.8, 1.4] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "PROVISIONAL", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "cylinder", "materialKey": "yellow", "selectable": true
+    },
+    {
+      "featureId": "P0-PH-AP01-VOL",
+      "assetId": "ASSET-P0-PH-AP01-VOL",
+      "name": { "it": "Volume tecnico avvicinamento", "en": "Technical approach volume" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "Asse, bordi, quote e profilo dell'avvicinamento non sono acquisiti.",
+      "replacementRequirement": "DTM, profilo e sezioni autorizzati e metricamente controllati.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, -7.5, 0.9], "rotation": [0, 0, -0.12], "scale": [4.2, 7.5, 1.8] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "PROVISIONAL", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "box", "materialKey": "cyan", "selectable": true
+    },
+    {
+      "featureId": "P0-PH-LGWB-VOL",
+      "assetId": "ASSET-P0-PH-LGWB-VOL",
+      "name": { "it": "Ingombro tecnico occidentale", "en": "Western technical volume" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "Impronta, alzato e quote del settore occidentale non sono acquisiti.",
+      "replacementRequirement": "Pianta e rilievo NOW con distinzione antico, restauro e moderno.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [-5.2, 1.7, 2.2], "rotation": [0, 0, 0], "scale": [5.2, 4.4, 4.4] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "PROVISIONAL", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "box", "materialKey": "magenta", "selectable": true
+    },
+    {
+      "featureId": "P0-PH-LGEC-VOL",
+      "assetId": "ASSET-P0-PH-LGEC-VOL",
+      "name": { "it": "Ingombro tecnico orientale", "en": "Eastern technical volume" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "Impronta, alzato e quote del settore opposto non sono acquisiti.",
+      "replacementRequirement": "Pianta e rilievo NOW con distinzione antico, restauro e moderno.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [5.2, 1.7, 2.2], "rotation": [0, 0, 0], "scale": [5.2, 4.4, 4.4] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "PROVISIONAL", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "box", "materialKey": "cyan", "selectable": true
+    },
+    {
+      "featureId": "P0-PH-LG01-VOL",
+      "assetId": "ASSET-P0-PH-LG01-VOL",
+      "name": { "it": "Segnaposto astratto LG01", "en": "Abstract LG01 placeholder" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "La geometria critica della soglia e della porta non è disponibile.",
+      "replacementRequirement": "Geometria critica registrata, fonti e diritti verificati, Gate P0-MIN aperto.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, 1.2, 2.4], "rotation": [0, 0, 0], "scale": [3.2, 1.8, 4.8] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "PROVISIONAL", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "box", "materialKey": "yellow", "selectable": true
+    },
+    {
+      "featureId": "P0-PH-IR01-VOL",
+      "assetId": "ASSET-P0-PH-IR01-VOL",
+      "name": { "it": "Primo settore interno tecnico", "en": "Technical first inner sector" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "Percorso, quote e separazione REM/MOD non sono acquisiti.",
+      "replacementRequirement": "DTM autorizzato e separazione documentata di antico, restauro e moderno.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, 8, 1.2], "rotation": [0, 0, 0.08], "scale": [7.5, 7, 2.4] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "PROVISIONAL", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "box", "materialKey": "magenta", "selectable": true
+    },
+    {
+      "featureId": "P0-PH-SEAM-P1",
+      "assetId": "ASSET-P0-PH-SEAM-P1",
+      "name": { "it": "Seam tecnico verso P1", "en": "Technical seam toward P1" },
+      "status": "PLACEHOLDER", "placeholder": true, "metricStatus": "M0",
+      "placeholderReason": "Linea, quota e normale del seam sono ancora NULL.",
+      "replacementRequirement": "Seam M3 o limite esplicito approvato nel pacchetto topografico.",
+      "displayTransform": { "space": "DEBUG_DISPLAY", "position": [0, 11.2, 0.08], "rotation": [0, 0, 0], "scale": [11, 0.3, 0.15] },
+      "temporalStates": ["COMMON"], "sources": [], "decisionIds": [], "confidenceGrade": null, "epistemicKind": null,
+      "publicationClass": "DEMO", "workflowStatus": "STAGING", "releaseEligible": false,
+      "primitiveType": "seam", "materialKey": "yellow", "selectable": true
+    }
+  ]
+}
