@@ -1,0 +1,58 @@
+{
+  "name": "micene-pwa-step12",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prototipo tecnico controllato della PWA Micene — solo PLACEHOLDER.",
+  "scripts": {
+    "dev": "vite --config apps/web/vite.config.ts --host 0.0.0.0",
+    "preview": "node tools/static-server.mjs",
+    "validate:registry": "node tools/validate-registry.mjs",
+    "typecheck": "tsc -p apps/web/tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "lint": "eslint apps/web/src apps/web/*.ts tests tools",
+    "test": "vitest run --config apps/web/vitest.config.ts",
+    "test:watch": "vitest --config apps/web/vitest.config.ts",
+    "test:e2e": "playwright test --project=desktop-chromium && playwright test --project=tablet-portrait-simulated && playwright test --project=tablet-landscape-simulated",
+    "capture": "node tools/capture-and-measure.mjs",
+    "report:build": "node tools/report-build.mjs",
+    "build": "npm run validate:registry && npm run typecheck && vite build --config apps/web/vite.config.ts",
+    "check": "npm run lint && npm run test && npm run build"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^9.17.1",
+    "i18next": "^26.3.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-i18next": "^17.0.10",
+    "react-router-dom": "^7.18.1",
+    "vite-plugin-pwa": "^1.3.0",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.61.1",
+    "@sparticuz/chromium": "^149.0.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "axe-core": "^4.12.1",
+    "eslint": "^10.7.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "jsdom": "^29.1.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
+  }
+}
