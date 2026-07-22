@@ -1,18 +1,17 @@
-# PROJECT STATE — 2026-07-21
+# PROJECT STATE — 2026-07-22
 
 ## Sintesi verificata
 
-Step 12 implementato come prototipo tecnico controllato. Il progetto compila, genera una PWA installabile a livello tecnico, riapre la shell offline dopo la prima visita e rende una scena WebGL2 composta da dieci record `PLACEHOLDER` validati.
+Step 15 implementato come direzione artistica e interfaccia immersiva della scena P0 provvisoria. L’esperienza conserva l’architettura Babylon/React, il fallback 2D, il picking scientifico, la PWA offline e i vincoli di pubblicazione.
 
 ## Gate
 
 | Gate | Stato | Evidenza | Limite residuo |
 |---|---|---|---|
-| T0 | APERTO | Mandato umano dello Step 12 | Non apre P0-MIN |
-| T1 | PASS nell’ambiente testato | Build, manifest, service worker, offline, fallback e axe | Installazione e aggiornamento su Safari/iPad reale: PENDING DEVICE |
-| T2 | PASS nell’ambiente testato | Scena, prima/terza persona, tastiera, touch simulato, reset, picking e diagnostica | Prestazioni e gesti su iPad reale: PENDING DEVICE |
-| Base T4 | PASS STRUTTURALE | picking → featureId → scheda; legenda A–D/M0–M3; fonti e decisioni NULL | Non equivale a T4 scientifico completo |
-| P0-MIN | CHIUSO | Dati metrici, NOW e separazione REM/MOD ancora mancanti | Invariato |
+| T1 | PASS nell’ambiente testato | build PWA, manifest sotto base path, service worker, offline, fallback e axe | nuovo collaudo su Safari/iPad reale non eseguito nello Step 15 |
+| T2 | PASS nell’ambiente testato | scena, prima/terza persona, touch simulato, reset, profili adattivi e diagnostica | FPS reale su iPad da misurare sul dispositivo |
+| Base T4 | PASS STRUTTURALE | picking su mesh unite → featureId → scheda; legenda a quattro classi | non equivale a validazione archeologica |
+| P0-MIN | CHIUSO | nessun rilievo istituzionale, misura controllata o autorizzazione acquisita | invariato |
 
 ## Build e test finali
 
@@ -20,35 +19,26 @@ Step 12 implementato come prototipo tecnico controllato. Il progetto compila, ge
 - ESLint: PASS.
 - TypeScript strict: PASS.
 - Vitest/Testing Library: 4 file, 7 test, tutti PASS.
-- Build Vite: PASS.
-- Playwright desktop: PASS per shell, axe, fallback, scena, selezione, cambio camera, touch HTML, manifest mancante e offline.
-- Tablet 834×1194 simulato: PASS.
-- Tablet 1194×834 simulato: PASS.
-- Safari/iPad reale: non eseguito, `PENDING DEVICE`.
+- Build Vite/PWA: PASS; precache Workbox circa 2,15 MiB.
+- Playwright desktop: PASS, inclusi axe, fallback, picking, pannelli, modalità immersiva, manifest e offline.
+- Viewport 834×1194 e 1194×834 con touch simulato: PASS.
+- Safari/iPad reale: non eseguito in questo ambiente; resta `PENDING DEVICE` per la nuova resa Step 15.
 
-## Misure ottenute
+## Diagnostica grafica
 
-Ambiente: Chromium 149 headless, WebGL2 tramite ANGLE/SwiftShader, viewport 1280×720. Non è hardware iPad.
+Il test headless usa Chromium 149 e SwiftShader, cioè rendering software senza GPU: gli FPS non sono trasferibili a desktop o iPad reali. Dopo l’unione delle mesh le draw call misurate sono scese da 422 a 68; i triangoli visibili sono circa 9.652 nel profilo Equilibrato. Il profilo Leggero riduce scala hardware e dettagli decorativi.
 
-| Metrica | Risultato | Qualifica |
-|---|---:|---|
-| FPS | 59,7 | misurato in headless SwiftShader |
-| Frame time | 16,8 ms | misurato |
-| Draw call | 12 | misurato |
-| Triangoli visibili | 157 | misurato |
-| Shell iniziale gzip | 107.879 byte | calcolato sulla build |
-| Precache Workbox | 2.080,21 KiB | sopra target 2 MiB; sotto soglia 4 MiB |
+## Stato scientifico e richieste
 
-## Stato richieste
-
-- R01, R02, R03 e R05: pronte dopo compilazione o conferma; non inviate.
-- R04: sospesa e non inviabile.
+- La scena resta `M0 / DEBUG_DISPLAY`; nessuna misura è derivabile.
+- Stato attuale e 1250 a.C. non sono fusi; la vista 1250 è bloccata.
+- R01, R02, R03 e R05 non inviate; R04 sospesa e non inviabile.
 - Risposte, licenze e autorizzazioni: nessuna ricevuta.
 - Dati personali: non utilizzati.
 
-## Blocchi e problemi residui
+## Limiti residui
 
-- Verifica reale di installazione, offline, aggiornamento, touch e prestazioni su Safari/iPad.
-- Precache di 2,03 MiB circa: supera marginalmente il target, non la soglia minima.
-- Chunk Babylon da circa 1,65 MB non compresso: lazy-loaded sull’esploratore, ma da ottimizzare dopo la misura su dispositivo.
-- Nessun dato archeologico può sostituire i segnaposto finché P0-MIN resta chiuso.
+- Blocchi, rilievo dei leoni, terreno, pietre e vegetazione restano procedurali.
+- Texture fotografiche/PBR, modelli professionali e fotogrammetria non sono presenti.
+- Il chunk Babylon resta ampio ma è caricato solo entrando nell’esploratore.
+- Il fotorealismo dell’immagine di direzione artistica richiede produzione asset dedicata e fonti legalmente utilizzabili.

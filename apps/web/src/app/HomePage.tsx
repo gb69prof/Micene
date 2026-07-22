@@ -7,23 +7,23 @@ export function HomePage() {
     <main className="home-page">
       <section className="hero-panel">
         <div className="hero-copy">
-          <p className="eyebrow">STEP 14 · LABORATORIO VISIVO</p>
-          <h1>Avvicinarsi alla Porta, senza fingere un rilievo.</h1>
-          <p className="lead">Una scena evocativa e navigabile dello stato attuale della Porta dei Leoni. La forma visiva è procedurale e provvisoria: non contiene misure controllate né anticipa la Micene del 1250 a.C.</p>
+          <p className="eyebrow">STEP 15 · DIREZIONE ARTISTICA</p>
+          <h1>La Porta diventa un’esperienza, senza smettere di essere onesta.</h1>
+          <p className="lead">Un allestimento museale immersivo per esplorare lo stato attuale in forma evocativa. Atmosfera, luce e materiali sono procedurali; geometrie e proporzioni restano provvisorie e non metriche.</p>
           <div className="hero-actions">
-            <Link className="primary-button" to="/explorer">{t('openExplorer')}</Link>
+            <Link className="primary-button" to="/explorer">Inizia l’esplorazione</Link>
             <Link className="secondary-button" to="/fallback">Consulta il fallback accessibile</Link>
           </div>
         </div>
         <div className="status-orbit" aria-label="Stato dei Gate">
           <div className="orbit-ring"><span>T1</span><span>T2</span><span>T4 base</span></div>
-          <div className="orbit-core"><strong>M0</strong><span>LG01 semantica</span></div>
+          <div className="orbit-core"><strong>15</strong><span>direzione artistica · M0</span></div>
         </div>
       </section>
       <section className="principle-grid" aria-label="Principi di controllo">
-        <article><span>01</span><h2>Dato ≠ grafica</h2><p>Le coordinate di visualizzazione tecnica restano separate dai dati scientifici.</p></article>
-        <article><span>02</span><h2>PLACEHOLDER ≠ D</h2><p>Il segnaposto è fuori dai livelli A–D e non è un’ipotesi archeologica.</p></article>
-        <article><span>03</span><h2>{t('gateClosed')}</h2><p>Nessun Gate tecnico modifica la chiusura archeologica e metrica di P0-MIN.</p></article>
+        <article><span>ORA</span><h2>Regia visiva</h2><p>HUD museale, luce mediterranea, foschia, materiali e profondità migliorano subito con codice.</p></article>
+        <article><span>PRODUZIONE</span><h2>Asset realistici</h2><p>Pietra PBR, fotogrammetria e modelli professionali richiedono una fase dedicata e fonti riutilizzabili.</p></article>
+        <article><span>ESCLUSO</span><h2>{t('gateClosed')}</h2><p>Nessun dettaglio non documentato e nessuna geometria presentata come rilievo o ricostruzione verificata.</p></article>
       </section>
       <section className="gate-strip">
         <div><span>R01 · R02 · R03 · R05</span><strong>Pronte dopo compilazione/conferma · non inviate</strong></div>

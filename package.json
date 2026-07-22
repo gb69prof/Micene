@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Prototipo tecnico controllato della PWA Micene — solo PLACEHOLDER.",
+  "description": "Esperienza museale immersiva provvisoria della Porta dei Leoni — geometria M0.",
   "scripts": {
     "dev": "vite --config apps/web/vite.config.ts --host 0.0.0.0",
     "preview": "node tools/static-server.mjs",

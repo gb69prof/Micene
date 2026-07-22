@@ -21,18 +21,18 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,
-      includeAssets: ['icons/*.png', 'release-step12.json'],
+      includeAssets: ['icons/*.png', 'release-step15.json'],
       manifest: {
-        name: 'Micene — Prototipo tecnico controllato',
-        short_name: 'Micene P0 LAB',
-        description: 'Laboratorio tecnico PLACEHOLDER. Non è una ricostruzione di Micene.',
+        name: 'Micene — Esplorazione archeologica 3D',
+        short_name: 'Micene 3D',
+        description: 'Esperienza museale provvisoria della Porta dei Leoni. Non è un rilievo metrico né una ricostruzione verificata.',
         lang: 'it',
         start_url: './',
         scope: './',
         display: 'standalone',
         orientation: 'any',
-        background_color: '#07111b',
-        theme_color: '#0a1522',
+        background_color: '#15130f',
+        theme_color: '#211d17',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }

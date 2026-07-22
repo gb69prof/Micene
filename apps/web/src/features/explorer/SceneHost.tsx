@@ -36,6 +36,7 @@ export function SceneHost({ onDiagnostics, onEngineError, controlsRef }: {
 
   useEffect(() => { if (ready) adapterRef.current?.setCameraMode(cameraMode); }, [cameraMode, ready]);
   useEffect(() => { if (ready) adapterRef.current?.setSelection(selectedFeatureId); }, [selectedFeatureId, ready]);
+  useEffect(() => { if (ready) adapterRef.current?.setGraphicProfile(graphicProfile); }, [graphicProfile, ready]);
 
-  return <canvas ref={canvasRef} className="scene-canvas" aria-label="Scena diagnostica 3D composta soltanto da primitive PLACEHOLDER" tabIndex={0} />;
+  return <canvas ref={canvasRef} className="scene-canvas" aria-label="Scena 3D procedurale provvisoria della Porta dei Leoni" tabIndex={0} />;
 }

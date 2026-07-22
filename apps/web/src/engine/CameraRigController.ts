@@ -7,8 +7,8 @@ import type { CameraMode, CameraPoseRecord } from '@/state/appStore';
 import { babylonToScientific, scientificToBabylon } from './coordinates';
 import type { MoveDirection } from './types';
 
-const DEFAULT_POSITION = new Vector3(0, 5.3, -24);
-const DEFAULT_TARGET = new Vector3(0, 5.4, 2);
+const DEFAULT_POSITION = new Vector3(0, 4.4, -23.5);
+const DEFAULT_TARGET = new Vector3(0, 4.7, 7.5);
 
 export class CameraRigController {
   private camera: Camera | null = null;

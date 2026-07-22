@@ -33,7 +33,7 @@ export const useAppStore = create<AppState>()(persist(
     setLanguage: (language) => set({ language })
   }),
   {
-    name: 'micene-step14-preferences-v1',
+    name: 'micene-step15-preferences-v1',
     partialize: ({ cameraMode, selectedFeatureId, cameraPose, graphicProfile, language }) => ({
       cameraMode, selectedFeatureId, cameraPose, graphicProfile, language
     })

@@ -4,8 +4,8 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
   it: { translation: {
     appName: 'Micene · laboratorio P0',
-    prototype: 'PROTOTIPO TECNICO',
-    warning: 'PLACEHOLDER — NON È UNA RICOSTRUZIONE DI MICENE',
+    prototype: 'ESPLORAZIONE ARCHEOLOGICA 3D',
+    warning: 'Modello visivo provvisorio — non rilievo metrico né ricostruzione archeologica verificata',
     home: 'Quadro iniziale', explorer: 'Esploratore 3D', fallback: 'Fallback 2D',
     openExplorer: 'Apri il laboratorio 3D', gateClosed: 'P0-MIN chiuso',
     firstPerson: 'Prima persona', thirdPerson: 'Terza persona', resetCamera: 'Reset camera',
@@ -15,8 +15,8 @@ const resources = {
   }},
   en: { translation: {
     appName: 'Mycenae · P0 laboratory',
-    prototype: 'TECHNICAL PROTOTYPE',
-    warning: 'PLACEHOLDER — THIS IS NOT A RECONSTRUCTION OF MYCENAE',
+    prototype: '3D ARCHAEOLOGICAL EXPLORATION',
+    warning: 'Provisional visual model — neither a metric survey nor a verified archaeological reconstruction',
     home: 'Overview', explorer: '3D Explorer', fallback: '2D fallback',
     openExplorer: 'Open the 3D laboratory', gateClosed: 'P0-MIN closed',
     firstPerson: 'First person', thirdPerson: 'Third person', resetCamera: 'Reset camera',

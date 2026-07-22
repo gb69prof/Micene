@@ -1,7 +1,14 @@
-# NEXT STEP — unica attività autorizzata
+# NEXT STEP — produzione controllata degli asset realistici
 
-## Step 13 · Collaudo controllato su iPad reale
+## Step 16 · Pipeline degli asset 3D della Porta dei Leoni
 
-Eseguire sul dispositivo reale scelto dal responsabile una sessione documentata di installazione PWA, riapertura offline, aggiornamento controllato, prima/terza persona, picking, gesti touch e misura prestazionale.
+Definire e provare una pipeline sostituibile per pietra, murature, rilievo, terreno e vegetazione mediante modelli professionali e materiali PBR legalmente riutilizzabili.
 
-L’attività deve registrare modello iPad, versione iPadOS/Safari, orientamento, profilo grafico, FPS/frame time, errori e schermate. Non autorizza import di dati archeologici, ricostruzione 1250, invio di richieste o apertura di P0-MIN.
+Lo Step 16 dovrà separare:
+
+- asset estetici generici, utilizzabili senza attribuire precisione archeologica;
+- asset derivati da fonti e fotografie con diritti verificati;
+- geometrie metriche, ancora bloccate dal Gate `P0-MIN`;
+- stato attuale e futura ricostruzione 1250 a.C., che non possono essere fusi.
+
+Prima dell’espansione a tutta Micene resta necessario un collaudo della nuova resa Step 15 su iPad reale, con FPS, frame time, orientamento, profilo grafico e schermate.

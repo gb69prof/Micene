@@ -15,7 +15,10 @@ describe('modalità scientifica strutturale', () => {
 
   it('distingue PLACEHOLDER, A–D, natura epistemica e M0–M3 senza solo colore', () => {
     render(<ScientificLegend />);
-    expect(screen.getByText(/fuori dalla scala A–D/)).toBeInTheDocument();
+    expect(screen.getByText('Fonte/documentato')).toBeInTheDocument();
+    expect(screen.getByText('Inferenza visiva')).toBeInTheDocument();
+    expect(screen.getByText('Ipotesi estetica')).toBeInTheDocument();
+    expect(screen.getByText('Placeholder')).toBeInTheDocument();
     expect(screen.getByText(/DATA/)).toBeInTheDocument();
     expect(screen.getByText(/INFERENCE/)).toBeInTheDocument();
     expect(screen.getByText(/M3/)).toBeInTheDocument();

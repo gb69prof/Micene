@@ -36,7 +36,7 @@ const registrySchema = z.object({
 }).strict();
 
 const registry = JSON.parse(await readFile(resolve(root, 'data/assets/placeholders.json'), 'utf8'));
-const manifest = JSON.parse(await readFile(resolve(root, 'assets/manifests/release-step12.json'), 'utf8'));
+const manifest = JSON.parse(await readFile(resolve(root, 'assets/manifests/release-step15.json'), 'utf8'));
 const parsed = registrySchema.parse(registry);
 const assetIds = new Set(parsed.records.map((record) => record.assetId));
 const featureIds = new Set(parsed.records.map((record) => record.featureId));

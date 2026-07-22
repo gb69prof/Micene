@@ -3,8 +3,8 @@ import type { ManifestResult } from '@/services/releaseManifest';
 
 export function DiagnosticsPanel({ data, manifest, online }: { data: DiagnosticsSnapshot | null; manifest: ManifestResult; online: boolean }) {
   return (
-    <details className="panel diagnostics-panel" open>
-      <summary>Diagnostica misurata</summary>
+    <section className="panel diagnostics-panel">
+      <div className="panel-heading"><span>DIAGNOSTICA MISURATA</span><b>LIVE</b></div>
       <div className="diagnostic-grid">
         <Metric label="FPS" value={data ? data.fps.toFixed(1) : '—'} kind="MISURATO" />
         <Metric label="Frame time" value={data ? `${data.frameTimeMs.toFixed(1)} ms` : '—'} kind="MISURATO" />
@@ -20,7 +20,7 @@ export function DiagnosticsPanel({ data, manifest, online }: { data: Diagnostics
         <Metric label="Target desktop" value="60 FPS" kind="TARGET · NON RISULTATO" />
       </div>
       {data && <p className="camera-readout">Posizione M0/DEBUG_DISPLAY: X {data.cameraPose.position.x} · Y {data.cameraPose.position.y} · Z {data.cameraPose.position.z}</p>}
-    </details>
+    </section>
   );
 }
 

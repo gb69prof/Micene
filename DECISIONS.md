@@ -1,4 +1,4 @@
-# DECISIONS — Step 12
+# DECISIONS — Step 12–15
 
 | ID | Decisione applicata | Motivo / prova |
 |---|---|---|
@@ -19,3 +19,16 @@
 | D12-15 | Nessuna analytics o telemetria | Vincolo privacy confermato dal responsabile |
 
 Le versioni complete sono registrate in `package-lock.json`; nessuna dipendenza è caricata da CDN a runtime.
+
+## Step 15
+
+| ID | Decisione applicata | Motivo / prova |
+|---|---|---|
+| D15-01 | Immagine di riferimento usata solo come direzione artistica | Non è una fonte archeologica o metrica |
+| D15-02 | HUD sovrapposto e cassetti richiudibili | La scena resta dominante e i controlli tecnici non occupano una colonna fissa |
+| D15-03 | Vista 1250 a.C. visibile ma disabilitata | Comunica la struttura futura senza fingere una ricostruzione disponibile |
+| D15-04 | Texture, normal map, cielo e terreno generati a runtime | Nessun asset esterno o diritto non verificato entra nella release |
+| D15-05 | Profili grafici applicati a DPR e dettagli | Controllo progressivo del carico, con iPad impostato di default su Leggero |
+| D15-06 | Mesh unite per feature e dettaglio | Draw call headless ridotte da 422 a 68 mantenendo metadata e picking |
+| D15-07 | Manifest risolto tramite `BASE_URL` | Eliminato il 404 osservato sotto `/Micene/` |
+| D15-08 | Watermark integrato e permanente | Avvertenza scientifica leggibile senza fascia tecnica invasiva |

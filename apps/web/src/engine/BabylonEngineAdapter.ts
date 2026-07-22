@@ -30,7 +30,7 @@ export class BabylonEngineAdapter implements EngineAdapter {
       const scene = new Scene(engine);
       this.engine = engine; this.scene = scene;
       this.instrumentation = new SceneInstrumentation(scene);
-      this.composer = new SceneComposer(); this.composer.compose(scene);
+      this.composer = new SceneComposer(); this.composer.compose(scene, profile);
       this.cameraRig = new CameraRigController(scene, canvas); this.cameraRig.activate(initialMode, initialPose);
       this.pointerHandler = (event: PointerEvent) => {
         const rect = canvas.getBoundingClientRect();
@@ -54,6 +54,12 @@ export class BabylonEngineAdapter implements EngineAdapter {
 
   setCameraMode(mode: CameraMode): void { this.cameraRig?.activate(mode); }
   setSelection(featureId: string | null): void { this.selectedFeatureId = featureId; this.composer?.setSelection(featureId); }
+  setGraphicProfile(profile: GraphicProfile): void {
+    this.profile = profile;
+    this.engine?.setHardwareScalingLevel(profile === 'light' ? 1.6 : profile === 'balanced' ? 1.25 : 1);
+    this.composer?.setGraphicProfile(profile);
+    this.engine?.resize();
+  }
   resetCamera(): void { this.cameraRig?.reset(); }
   nudge(direction: MoveDirection): void { this.cameraRig?.nudge(direction); }
 
