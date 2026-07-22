@@ -24,7 +24,7 @@ export const useAppStore = create<AppState>()(persist(
     cameraMode: 'third',
     selectedFeatureId: null,
     cameraPose: null,
-    graphicProfile: 'balanced',
+    graphicProfile: /iPad|iPhone|iPod/.test(navigator.userAgent) ? 'light' : 'balanced',
     language: 'it',
     setCameraMode: (cameraMode) => set({ cameraMode }),
     selectFeature: (selectedFeatureId) => set({ selectedFeatureId }),
@@ -33,7 +33,7 @@ export const useAppStore = create<AppState>()(persist(
     setLanguage: (language) => set({ language })
   }),
   {
-    name: 'micene-step12-preferences-v1',
+    name: 'micene-step14-preferences-v1',
     partialize: ({ cameraMode, selectedFeatureId, cameraPose, graphicProfile, language }) => ({
       cameraMode, selectedFeatureId, cameraPose, graphicProfile, language
     })

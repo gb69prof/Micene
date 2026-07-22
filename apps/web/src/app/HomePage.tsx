@@ -7,9 +7,9 @@ export function HomePage() {
     <main className="home-page">
       <section className="hero-panel">
         <div className="hero-copy">
-          <p className="eyebrow">STEP 12 · T0 APERTO</p>
-          <h1>Il contenitore prima della ricostruzione.</h1>
-          <p className="lead">Questo prototipo prova PWA, navigazione, picking, diagnostica e modalità scientifica. Non prova la forma di Micene: ogni volume è un segnaposto tecnico M0.</p>
+          <p className="eyebrow">STEP 14 · LABORATORIO VISIVO</p>
+          <h1>Avvicinarsi alla Porta, senza fingere un rilievo.</h1>
+          <p className="lead">Una scena evocativa e navigabile dello stato attuale della Porta dei Leoni. La forma visiva è procedurale e provvisoria: non contiene misure controllate né anticipa la Micene del 1250 a.C.</p>
           <div className="hero-actions">
             <Link className="primary-button" to="/explorer">{t('openExplorer')}</Link>
             <Link className="secondary-button" to="/fallback">Consulta il fallback accessibile</Link>

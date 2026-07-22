@@ -31,7 +31,7 @@ export default function ExplorerPage() {
 
   return (
     <main className="explorer-page">
-      <h1 className="sr-only">Esploratore 3D diagnostico PLACEHOLDER</h1>
+      <h1 className="sr-only">Laboratorio visivo 3D della Porta dei Leoni</h1>
       <div className="explorer-toolbar" aria-label="Controlli dell'esploratore">
         <div className="mode-switch" role="group" aria-label="Modalità camera">
           <button className={cameraMode === 'first' ? 'active' : ''} aria-pressed={cameraMode === 'first'} onClick={() => setCameraMode('first')}>Prima persona</button>
@@ -43,13 +43,13 @@ export default function ExplorerPage() {
             <option value="light">Leggero</option><option value="balanced">Equilibrato</option><option value="high">Alto</option>
           </select>
         </label>
-        <div className="axis-key" aria-label="Assi della scena"><span className="axis-x">X Est</span><span className="axis-y">Y Nord</span><span className="axis-z">Z alto</span></div>
+        <div className="axis-key" aria-label="Stato della scena"><span>STATO ATTUALE</span><span>LABORATORIO VISIVO</span></div>
       </div>
       <div className="explorer-layout">
         <section className="viewport-shell" aria-label="Viewport 3D">
           <SceneHost onDiagnostics={setDiagnostics} onEngineError={setEngineError} controlsRef={controlsRef} />
-          <div className="scene-badge"><strong>LG01</strong><span>origine semantica</span><b>M0 / coordinate metriche non determinate</b></div>
-          <div className="scene-watermark">PROTOTIPO TECNICO · PLACEHOLDER · NON È UNA RICOSTRUZIONE DI MICENE</div>
+          <div className="scene-badge"><strong>STEP 14</strong><span>scena evocativa provvisoria</span><b>M0 · nessuna misura derivabile</b></div>
+          <div className="scene-watermark">MODELLO VISIVO PROVVISORIO — NON RILIEVO METRICO NÉ RICOSTRUZIONE ARCHEOLOGICA VERIFICATA</div>
           <TouchControls onMove={move} />
           <div className="control-help">WASD / frecce · trascina per ruotare · rotella o pizzica per zoom</div>
           {engineError && <div className="inline-error" role="alert"><strong>Motore non disponibile</strong><span>{engineError}</span><a href="/fallback">Apri fallback 2D</a></div>}
