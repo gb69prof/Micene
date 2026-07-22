@@ -10,7 +10,7 @@ if (!root) throw new Error('Elemento root non disponibile.');
 
 createRoot(root).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <App />
     </BrowserRouter>
   </StrictMode>
