@@ -1,0 +1,16 @@
+{
+  "name": "Micene 1250 a.C. — La cittadella ricostruita",
+  "short_name": "Micene 1250",
+  "description": "Percorso 3D in prima persona nella cittadella di Micene ricostruita alla metà del XIII secolo a.C. Ogni ipotesi è dichiarata.",
+  "lang": "it",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#111719",
+  "theme_color": "#202b2d",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

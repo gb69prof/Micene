@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Micene 1250 a.C. — La cittadella ricostruita</title>
+<meta name="description" content="Percorso 3D in prima persona nella cittadella di Micene ricostruita al 1250 a.C. Ogni ipotesi è dichiarata.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16243d">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#f8f5ec; --muted:rgba(248,245,236,.72); --glass:rgba(23,29,31,.72);
+    --glass-strong:rgba(18,23,25,.88); --line:rgba(255,255,255,.18); --line-strong:rgba(255,255,255,.32);
+    --accent:#e0b267; --accent-2:#bf6d43; --stone:#c8b38f; --panel:#f0e4ca; --panel-ink:#29231b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0e1416;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+  #scene{position:fixed;inset:0;display:block;filter:saturate(1.08) contrast(1.035)}
+  button,textarea{font:inherit}
+  button{cursor:pointer}
+  button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* ---------- schermata iniziale ---------- */
+  #start{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    background:linear-gradient(115deg,rgba(10,16,18,.93),rgba(30,31,28,.52)),url('hero-reference.webp') center/cover no-repeat}
+  #start::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(circle at 70% 20%,rgba(255,213,145,.22),transparent 31%),
+    linear-gradient(180deg,rgba(8,13,15,.08),rgba(8,13,15,.62));backdrop-filter:blur(2px)}
+  .start-card{position:relative;max-width:720px;width:min(92%,720px);margin-left:min(4vw,70px);margin-right:auto;
+    background:linear-gradient(145deg,rgba(19,24,25,.86),rgba(27,30,29,.66));border:1px solid var(--line-strong);
+    border-radius:28px;box-shadow:0 30px 90px rgba(0,0,0,.48);padding:42px 46px;text-align:left;backdrop-filter:blur(18px) saturate(1.15)}
+  .start-card .over{font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+  .start-card h1{font-family:Georgia,"Times New Roman",serif;font-weight:700;color:#fff;font-size:clamp(38px,6vw,68px);line-height:.98;margin:14px 0 8px;text-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .start-card h1 em{font-style:normal;color:#f0c98a;font-weight:500}
+  .start-card .sub{max-width:560px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(17px,2vw,22px);line-height:1.4;color:rgba(255,255,255,.84);margin-bottom:22px}
+  .rule{height:1px;background:linear-gradient(90deg,var(--accent),transparent);margin:18px 0 22px}
+  .cmds{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.74);margin-bottom:24px}
+  .cmds span{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.06)}
+  .cmds b{color:#fff;font-weight:750}
+  #enterBtn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#f0c98a,#c9924b);color:#1d211f;border:0;border-radius:999px;
+    font-size:15px;font-weight:800;letter-spacing:.04em;padding:15px 24px;box-shadow:0 12px 34px rgba(201,146,75,.3);transition:.2s transform,.2s box-shadow}
+  #enterBtn::after{content:"→";font-size:20px;line-height:1}
+  #enterBtn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,146,75,.42)}
+  .metodo{margin-top:18px;max-width:590px;font-size:12.5px;color:rgba(255,255,255,.62);line-height:1.55}
+  .metodo b{color:#f0c98a}
+
+  /* ---------- HUD cinematografico ---------- */
+  #hud{position:fixed;inset:0;z-index:20;pointer-events:none;display:none;text-shadow:0 2px 12px rgba(0,0,0,.38)}
+  #hud::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+    radial-gradient(ellipse at center,transparent 53%,rgba(6,10,11,.18) 100%),
+    linear-gradient(180deg,rgba(4,8,10,.11),transparent 28%,transparent 70%,rgba(4,8,10,.18))}
+  .brand{position:absolute;top:24px;left:28px;display:flex;align-items:center;gap:14px}
+  .brand-mark{width:58px;height:58px;border:1px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;background:rgba(22,28,30,.68);backdrop-filter:blur(14px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+  .brand-mark svg{width:35px;height:35px;stroke:#fff;fill:none;stroke-width:1.6}
+  .brand-title{font-size:23px;font-weight:800;letter-spacing:-.02em}
+  .brand-sub{font-size:14px;color:rgba(255,255,255,.82);margin-top:2px}
+  .mode-stack{position:absolute;top:122px;left:28px;display:grid;gap:12px}
+  .hud-pill{pointer-events:auto;min-width:232px;display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:999px;padding:14px 18px;color:#fff;background:var(--glass);backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 10px 28px rgba(0,0,0,.18);transition:.18s}
+  .hud-pill:hover{transform:translateX(3px);background:rgba(34,41,42,.82);border-color:var(--line-strong)}
+  .hud-pill svg{width:23px;height:23px;stroke:#fff;fill:none;stroke-width:1.7;flex:0 0 auto}
+  .pill-copy{display:flex;flex-direction:column;text-align:left;line-height:1.13}
+  .pill-copy small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  .pill-copy strong{font-size:15px;font-weight:650;margin-top:3px}
+  .top-actions{position:absolute;top:25px;right:28px;display:flex;gap:10px}
+  .round-btn{pointer-events:auto;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--glass);color:#fff;backdrop-filter:blur(14px);box-shadow:0 10px 28px rgba(0,0,0,.2);transition:.18s}
+  .round-btn:hover,.round-btn.active{background:rgba(53,61,62,.88);border-color:var(--line-strong);transform:translateY(-2px)}
+  .round-btn svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .round-btn .fill{fill:currentColor;stroke:none}
+  #crosshair{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border:1px solid rgba(255,255,255,.88);border-radius:50%;box-shadow:0 0 0 4px rgba(0,0,0,.08),0 0 8px rgba(0,0,0,.35)}
+  #placeLabel{position:absolute;top:24px;left:50%;transform:translateX(-50%);padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(20,26,28,.5);backdrop-filter:blur(12px);
+    font-size:11px;font-weight:750;letter-spacing:.18em;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .4s}
+  #hint{position:absolute;bottom:94px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(20,26,28,.72);border:1px solid var(--line);border-radius:999px;color:#fff;
+    padding:10px 15px;font-size:13px;opacity:0;transition:opacity .25s;backdrop-filter:blur(12px)}
+  #hint b{display:grid;place-items:center;min-width:24px;height:24px;padding:0 7px;border-radius:8px;background:rgba(255,255,255,.13);color:#fff;font-size:12px}
+  #menuBtn{display:grid}
+  .bottom-left{position:absolute;left:28px;bottom:28px;display:flex;align-items:center;gap:12px}
+  .bottom-right{position:absolute;right:28px;bottom:28px;display:flex;gap:12px}
+  .camera-switch{pointer-events:auto;display:flex;align-items:center;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--glass);backdrop-filter:blur(14px)}
+  .camera-switch button{border:0;border-radius:999px;background:transparent;color:rgba(255,255,255,.68);padding:10px 16px;font-size:13px;white-space:nowrap;transition:.18s}
+  .camera-switch button.active{background:rgba(255,255,255,.13);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  #actBtn{display:none}
+  #actBtn.hot{display:grid}
+  #walkBtn.running{color:var(--accent)}
+
+  /* ---------- pannello didattico ---------- */
+  #panel{position:fixed;z-index:30;top:16px;right:16px;bottom:16px;width:min(470px,calc(100vw - 32px));
+    background:linear-gradient(180deg,rgba(242,232,211,.98),rgba(230,215,184,.97));color:var(--panel-ink);border:1px solid rgba(255,255,255,.55);border-radius:25px;
+    box-shadow:-18px 20px 70px rgba(0,0,0,.42);transform:translateX(calc(100% + 36px));transition:transform .36s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;overflow:hidden}
+  #panel.open{transform:translateX(0)}
+  .panel-head{background:linear-gradient(135deg,#202b2d,#35403d);color:#fff;padding:26px 28px 22px;position:relative}
+  .panel-head .over{font-size:10px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#efc786;padding-right:42px}
+  .panel-head h2{font-family:Georgia,"Times New Roman",serif;font-size:30px;font-weight:700;line-height:1.1;margin-top:8px;padding-right:34px}
+  .panel-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:50%;color:#fff;width:36px;height:36px;font-size:15px}
+  .panel-body{padding:24px 28px 32px;overflow-y:auto;font-family:Georgia,"Times New Roman",serif;font-size:16.5px;line-height:1.62}
+  .panel-body p{margin-bottom:14px}
+  .tag{display:inline-block;font-family:Inter,system-ui,sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;padding:5px 9px;margin:10px 0 8px;border-radius:999px;border:1px solid}
+  .tag.att{color:#315c3c;border-color:#6f9b76;background:#dfead8}
+  .tag.ipo{color:#7b4d18;border-color:#bc8e4a;background:#f2e0b9}
+
+  /* ---------- menu e finestre ---------- */
+  #menu,.modal{position:fixed;inset:0;z-index:35;display:none;align-items:center;justify-content:center;background:rgba(8,12,13,.62);backdrop-filter:blur(10px)}
+  .menu-card,.modal-card{max-width:650px;width:min(92%,650px);max-height:86vh;overflow-y:auto;background:linear-gradient(180deg,#f2e8d2,#e4d2ad);color:var(--panel-ink);
+    border:1px solid rgba(255,255,255,.6);border-radius:26px;box-shadow:0 30px 90px rgba(0,0,0,.42);padding:30px 34px}
+  .menu-card h2,.modal-card h2{font-family:Georgia,"Times New Roman",serif;color:#263234;font-size:30px;margin-bottom:8px}
+  .menu-card h3,.modal-card h3{font-family:Georgia,"Times New Roman",serif;color:#263234;font-size:18px;margin:19px 0 7px}
+  .menu-card p,.modal-card p{font-size:14.5px;line-height:1.55;margin-bottom:9px;color:#494237}
+  .slot{display:flex;justify-content:space-between;gap:14px;font-size:13px;padding:7px 0;border-bottom:1px dotted rgba(70,58,42,.28)}
+  .slot .st-proc{color:#86561d;font-style:italic}.slot .st-foto{color:#315c3c;font-weight:700}
+  .menu-actions,.modal-actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .menu-actions button,.modal-actions button{border:0;border-radius:999px;background:#283537;color:#fff;padding:11px 18px;font-size:14px;font-weight:700}
+  .menu-actions button.secondary,.modal-actions button.secondary{background:rgba(40,53,55,.1);color:#283537;border:1px solid rgba(40,53,55,.22)}
+  .map-wrap{position:relative;aspect-ratio:1.55;border-radius:18px;overflow:hidden;background:#c6b38d;border:1px solid rgba(55,45,32,.2);margin-top:16px}
+  .map-wrap svg{width:100%;height:100%;display:block}
+  .map-key{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#564c3c}
+  .map-key span{display:flex;align-items:center;gap:6px}.map-key i{width:10px;height:10px;border-radius:50%;background:#ab5a39;display:inline-block}.map-key i.user{background:#243a40}
+  #notesText{width:100%;min-height:230px;resize:vertical;border:1px solid rgba(50,45,35,.2);border-radius:16px;background:rgba(255,255,255,.48);color:#2c271f;padding:16px;line-height:1.55}
+  .help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+  .help-item{border:1px solid rgba(40,53,55,.15);border-radius:15px;padding:14px;background:rgba(255,255,255,.28)}
+  .help-item b{display:block;color:#283537;margin-bottom:4px}.help-item span{font-size:13px;color:#5d5446;line-height:1.4}
+
+  /* ---------- touch ---------- */
+  .touch-only{display:none}
+  body.touch .touch-only{display:block}
+  #joyL{position:fixed;left:28px;bottom:118px;width:112px;height:112px;z-index:25;pointer-events:auto;border:1px solid var(--line-strong);border-radius:50%;background:rgba(22,28,30,.35);backdrop-filter:blur(10px)}
+  #joyLKnob{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.38)}
+  @media(max-width:850px){
+    .brand{top:18px;left:18px}.brand-mark{width:50px;height:50px}.brand-title{font-size:18px}.brand-sub{font-size:12px}
+    .mode-stack{top:86px;left:18px}.hud-pill{min-width:0;width:52px;height:52px;padding:0;justify-content:center}.hud-pill .pill-copy{display:none}
+    .top-actions{top:18px;right:18px}.round-btn{width:46px;height:46px}.top-actions .optional{display:none}
+    .bottom-left{left:18px;bottom:18px}.bottom-right{right:18px;bottom:18px}.camera-switch button{padding:9px 11px;font-size:11px}
+    #hint{bottom:84px}.start-card{margin:auto;width:92%;padding:30px 26px}.metodo{font-size:11.5px}
+  }
+  @media(max-width:560px){.brand-copy{display:none}.camera-switch{display:none}.bottom-left{gap:8px}.round-btn{width:44px;height:44px}.top-actions{gap:7px}.help-grid{grid-template-columns:1fr}.menu-card,.modal-card{padding:24px 22px}}
+</style>
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+
+<!-- schermata iniziale -->
+<div id="start">
+  <div class="start-card">
+    <div class="over">Ricostruzione dichiarata · Tarda età del bronzo</div>
+    <h1>Micene <em>1250 a.C.</em></h1>
+    <div class="sub">La cittadella «ricca d’oro», percorsa in prima persona</div>
+    <div class="rule"></div>
+    <div class="cmds" id="cmdsDesktop">
+      <span><b>W A S D</b> muoversi</span><span><b>mouse</b> guardare</span>
+      <span><b>Maiusc</b> correre</span><span><b>E</b> leggere</span><span><b>Esc</b> menu</span>
+    </div>
+    <div class="cmds touch-only" style="display:none" id="cmdsTouch">
+      <span><b>levetta sinistra</b> muoversi</span><span><b>trascina a destra</b> guardare</span><span><b>E</b> leggere</span>
+    </div>
+    <button id="enterBtn">Varca la Porta</button>
+    <p class="metodo">Ogni pannello distingue ciò che è <b>attestato</b> dagli scavi da ciò che è
+    <b>ipotesi ricostruttiva</b>. Le superfici sono procedurali finché non collochi le tue fotografie
+    nella cartella <b>textures/</b> (vedi menu).</p>
+  </div>
+</div>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><path d="M8 8l16-4 16 4v13c0 10-6.8 18.2-16 22-9.2-3.8-16-12-16-22V8z"/><path d="M15 29c3-1 4-4 4-7l-3-4 5 2 3-6 3 6 5-2-3 4c0 3 1 6 4 7-3 4-6 6-9 7-3-1-6-3-9-7z"/><path d="M19 26h10M21 30h6"/></svg>
+    </div>
+    <div class="brand-copy"><div class="brand-title">Micene</div><div class="brand-sub">Esplorazione 1250 a.C.</div></div>
+  </div>
+
+  <div class="mode-stack">
+    <button class="hud-pill" id="eraBtn" aria-label="Informazioni sull'epoca">
+      <svg viewBox="0 0 24 24"><path d="M3 20h18M5 18h14M6 9h12M4 8l8-5 8 5M7 9v7M11 9v7M15 9v7M19 9v7"/></svg>
+      <span class="pill-copy"><small>Stato</small><strong>1250 a.C.</strong></span>
+    </button>
+    <button class="hud-pill active" id="reconBtn" aria-label="Attiva o disattiva la ricostruzione cromatica">
+      <svg viewBox="0 0 24 24"><path d="M12 3c4 3 7 6 7 10a7 7 0 01-14 0c0-4 3-7 7-10z"/><path d="M8 15c1 2 3 3 5 3"/></svg>
+      <span class="pill-copy"><small>Livello visivo</small><strong id="reconLabel">Ipotesi cromatica</strong></span>
+    </button>
+  </div>
+
+  <div class="top-actions">
+    <button class="round-btn" id="lightBtn" aria-label="Cambia luce" title="Cambia luce">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="round-btn optional active" id="atmoBtn" aria-label="Attiva o disattiva atmosfera" title="Atmosfera">
+      <svg viewBox="0 0 24 24"><path d="M5 18h13a4 4 0 000-8 6 6 0 00-11.4-1.8A5 5 0 005 18z"/></svg>
+    </button>
+    <button class="round-btn optional" id="soundBtn" aria-label="Attiva o disattiva suono ambientale" title="Suono ambientale">
+      <svg viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5z"/><path d="M17 9a4 4 0 010 6M19 6a8 8 0 010 12"/></svg>
+    </button>
+    <button class="round-btn" id="helpBtn" aria-label="Aiuto" title="Aiuto">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.3 2.3 0 114 1.4c-1.2.8-1.8 1.3-1.8 2.6M12 17h.01"/></svg>
+    </button>
+    <button class="round-btn" id="menuBtn" aria-label="Menu" title="Menu">
+      <svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg>
+    </button>
+  </div>
+
+  <div id="crosshair"></div>
+  <div id="placeLabel"></div>
+  <div id="hint"><b>E</b><span id="hintName"></span></div>
+
+  <div class="bottom-left">
+    <button class="round-btn" id="walkBtn" aria-label="Alterna passo e corsa" title="Passo / corsa">
+      <svg viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="2"/><path d="M10 9l3-2 3 2 1 4M12 10l-2 4-4 2M12 10l3 5-1 6M10 14l-1 7"/></svg>
+    </button>
+    <button class="round-btn" id="actBtn" aria-label="Leggi il punto di interesse" title="Leggi">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 21c1-5 3-8 7-8s6 3 7 8"/></svg>
+    </button>
+    <div class="camera-switch" aria-label="Modalità della camera">
+      <button id="firstBtn" class="active">Prima persona</button>
+      <button id="thirdBtn">Terza persona</button>
+    </div>
+  </div>
+
+  <div class="bottom-right">
+    <button class="round-btn" id="mapBtn" aria-label="Mappa" title="Mappa">
+      <svg viewBox="0 0 24 24"><path d="M3 6l5-3 8 3 5-3v15l-5 3-8-3-5 3V6zM8 3v15M16 6v15"/></svg>
+    </button>
+    <button class="round-btn" id="notesBtn" aria-label="Taccuino" title="Taccuino">
+      <svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5V3z"/><path d="M15 3v4h4M8 11h8M8 15h6"/></svg>
+    </button>
+  </div>
+
+  <div id="joyL" class="touch-only"><div id="joyLKnob"></div></div>
+</div>
+
+<!-- pannello didattico -->
+<aside id="panel">
+  <div class="panel-head">
+    <div class="over" id="pOver"></div>
+    <h2 id="pTitle"></h2>
+    <button class="panel-close" id="pClose">✕</button>
+  </div>
+  <div class="panel-body" id="pBody"></div>
+</aside>
+
+<!-- menu -->
+<div id="menu">
+  <div class="menu-card">
+    <h2>Micene 1250 a.C.</h2>
+    <p>Percorso didattico in prima persona nella cittadella ricostruita alla metà del XIII secolo a.C.,
+    l’epoca della Porta dei Leoni e della grande cinta occidentale.</p>
+    <h3>Nota metodologica</h3>
+    <p>La pianta segue, semplificandola, quella reale del sito. Alzati, coperture, colori e arredi sono
+    ipotesi ricostruttive: ogni pannello dichiara la distinzione. Due licenze consapevoli: il Granaio e la
+    cisterna sotterranea appartengono a fasi di poco successive al 1250, ma sono inclusi perché parte
+    dell’immagine canonica della cittadella.</p>
+    <h3>Le tue fotografie</h3>
+    <p>Colloca nella cartella <b>textures/</b> file JPG con questi nomi esatti: le superfici procedurali
+    verranno sostituite automaticamente al caricamento.</p>
+    <div id="slotList"></div>
+    <div class="menu-actions">
+      <button id="resumeBtn">Riprendi il cammino</button>
+      <button id="restartBtn">Torna alla Porta</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="eraModal">
+  <div class="modal-card">
+    <h2>Micene, circa 1250 a.C.</h2>
+    <p>La scena propone una ricostruzione esplorabile della cittadella nella fase della grande Porta dei Leoni. Geometria, colori e arredi non hanno tutti lo stesso grado di certezza: i pannelli distinguono dati archeologici, inferenze e licenze dichiarate.</p>
+    <div class="modal-actions"><button data-close-modal>Chiudi</button></div>
+  </div>
+</div>
+
+<div class="modal" id="helpModal">
+  <div class="modal-card">
+    <h2>Come esplorare</h2>
+    <div class="help-grid">
+      <div class="help-item"><b>Muoversi</b><span>W A S D oppure frecce. Su touch usa la levetta virtuale.</span></div>
+      <div class="help-item"><b>Guardare</b><span>Muovi il mouse; su tablet trascina sul lato destro.</span></div>
+      <div class="help-item"><b>Leggere</b><span>Premi E o il pulsante persona quando compare un punto d'interesse.</span></div>
+      <div class="help-item"><b>Camera</b><span>Passa dalla prima alla terza persona senza interrompere l'esplorazione.</span></div>
+    </div>
+    <div class="modal-actions"><button data-close-modal>Ho capito</button></div>
+  </div>
+</div>
+
+<div class="modal" id="mapModal">
+  <div class="modal-card">
+    <h2>Mappa della cittadella</h2>
+    <p>La posizione del visitatore è aggiornata durante l'esplorazione.</p>
+    <div class="map-wrap">
+      <svg viewBox="0 0 600 390" role="img" aria-label="Mappa schematica di Micene">
+        <defs><filter id="paper"><feTurbulence baseFrequency=".7" numOctaves="2" seed="7" type="fractalNoise" result="n"/><feBlend in="SourceGraphic" in2="n" mode="soft-light"/></filter></defs>
+        <rect width="600" height="390" fill="#cdbb94" filter="url(#paper)"/>
+        <path d="M76 206C86 111 161 58 279 54c126-5 223 52 254 135 24 65-11 126-91 151-102 32-252 28-329-31-33-25-43-64-37-103z" fill="#dbc9a5" stroke="#5f5a48" stroke-width="8"/>
+        <path d="M82 206l45-8 44-16 60-8 48-9 56-18 75 3 76 22 45 25" fill="none" stroke="#7a715b" stroke-width="10" stroke-linecap="round"/>
+        <circle cx="115" cy="217" r="12" fill="#a65335"/><text x="132" y="221" font-size="18" fill="#3a352b">Porta dei Leoni</text>
+        <circle cx="180" cy="191" r="10" fill="#a65335"/><text x="196" y="195" font-size="16" fill="#3a352b">Circolo A</text>
+        <rect x="290" y="128" width="108" height="70" rx="8" fill="#9d8e6c" stroke="#554e3d" stroke-width="3"/><text x="313" y="168" font-size="18" fill="#fff7e5">Palazzo</text>
+        <circle cx="453" cy="271" r="10" fill="#a65335"/><text x="468" y="276" font-size="16" fill="#3a352b">Cisterna</text>
+        <circle id="mapPlayer" cx="92" cy="220" r="8" fill="#243a40" stroke="#fff" stroke-width="3"/>
+      </svg>
+    </div>
+    <div class="map-key"><span><i></i> Luogo principale</span><span><i class="user"></i> La tua posizione</span></div>
+    <div class="modal-actions"><button data-close-modal>Chiudi mappa</button></div>
+  </div>
+</div>
+
+<div class="modal" id="notesModal">
+  <div class="modal-card">
+    <h2>Taccuino di viaggio</h2>
+    <p>Le note restano salvate in questo dispositivo.</p>
+    <textarea id="notesText" placeholder="Annota osservazioni, domande, collegamenti didattici…"></textarea>
+    <div class="modal-actions"><button id="saveNotesBtn">Salva</button><button class="secondary" id="clearNotesBtn">Cancella</button><button class="secondary" data-close-modal>Chiudi</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* =========================================================
+   MICENE 1250 a.C. — motore e ricostruzione
+   Palette: navy #16243d · oro #c9a227 · pergamena #f1e8d2
+   ========================================================= */
+'use strict';
+const IS_TOUCH = ('ontouchstart' in window) && matchMedia('(pointer:coarse)').matches;
+if (IS_TOUCH){ document.body.classList.add('touch');
+  document.getElementById('cmdsDesktop').style.display='none';
+  document.getElementById('cmdsTouch').style.display='flex'; }
+
+/* ---------- texture procedurali + slot fotografici ---------- */
+const SLOTS = [
+  ['pietra_ciclopica','Mura ciclopiche (calcare)'],
+  ['conglomerato','Conglomerato (Porta dei Leoni)'],
+  ['lastra','Lastre e stele (Circolo A)'],
+  ['intonaco','Intonaco degli edifici'],
+  ['affresco','Fascia affrescata del megaron'],
+  ['legno','Legno (porte, colonne, travi)'],
+  ['terra','Terreno della collina'],
+  ['roccia','Roccia dei monti'],
+];
+const slotStatus = {};
+
+function canvasTex(w,h,draw,repX=1,repY=1){
+  const c=document.createElement('canvas'); c.width=w; c.height=h;
+  draw(c.getContext('2d'),w,h);
+  const t=new THREE.CanvasTexture(c);
+  t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(repX,repY);
+  t.anisotropy=8; return t;
+}
+function noise(ctx,w,h,alpha,n=4000){
+  for(let i=0;i<n;i++){ ctx.fillStyle=`rgba(${30+Math.random()*40|0},${25+Math.random()*35|0},${20+Math.random()*30|0},${alpha*Math.random()})`;
+    ctx.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*2,1+Math.random()*2); }
+}
+const PROC = {
+  pietra_ciclopica:(rx=1,ry=1)=>canvasTex(1024,1024,(g,w,h)=>{
+    g.fillStyle='#8d867a'; g.fillRect(0,0,w,h);
+    const rows=6;
+    for(let r=0;r<rows;r++){
+      let x=-20+Math.random()*30; const y0=r*(h/rows);
+      while(x<w+20){
+        const bw=90+Math.random()*130, bh=(h/rows)*(0.9+Math.random()*0.25);
+        const jx=(Math.random()-0.5)*14, jy=(Math.random()-0.5)*10;
+        const shade=118+Math.random()*46;
+        g.beginPath();
+        g.moveTo(x+jx, y0+jy);
+        g.lineTo(x+bw*0.55+(Math.random()-0.5)*22, y0+jy+(Math.random()-0.5)*16);
+        g.lineTo(x+bw+jx, y0+jy+(Math.random()-0.5)*14);
+        g.lineTo(x+bw+(Math.random()-0.5)*18, y0+bh+jy);
+        g.lineTo(x+bw*0.45+(Math.random()-0.5)*22, y0+bh+jy+(Math.random()-0.5)*16);
+        g.lineTo(x+jx+(Math.random()-0.5)*12, y0+bh+jy);
+        g.closePath();
+        g.fillStyle=`rgb(${shade},${shade-8},${shade-22})`; g.fill();
+        g.strokeStyle='rgba(40,34,26,0.85)'; g.lineWidth=5; g.stroke();
+        g.strokeStyle='rgba(230,222,204,0.18)'; g.lineWidth=2;
+        g.beginPath(); g.moveTo(x+jx+4,y0+jy+5); g.lineTo(x+bw*0.5,y0+jy+3); g.stroke();
+        x+=bw*0.92;
+      }
+    }
+    noise(g,w,h,0.10,9000);
+  },rx,ry),
+  conglomerato:(rx=1,ry=1)=>canvasTex(1024,1024,(g,w,h)=>{
+    g.fillStyle='#9a8871'; g.fillRect(0,0,w,h);
+    for(let i=0;i<2600;i++){
+      const r=2+Math.random()*13, x=Math.random()*w, y=Math.random()*h;
+      const v=95+Math.random()*90;
+      g.fillStyle=`rgba(${v},${v-14},${v-34},${0.55+Math.random()*0.4})`;
+      g.beginPath(); g.ellipse(x,y,r,r*(0.6+Math.random()*0.5),Math.random()*3,0,7); g.fill();
+    }
+    noise(g,w,h,0.12,6000);
+  },rx,ry),
+  lastra:(rx=1,ry=1)=>canvasTex(512,512,(g,w,h)=>{
+    g.fillStyle='#a49c8c'; g.fillRect(0,0,w,h);
+    for(let i=0;i<26;i++){ g.strokeStyle=`rgba(70,62,50,${0.08+Math.random()*0.12})`; g.lineWidth=1+Math.random()*2;
+      g.beginPath(); g.moveTo(0,Math.random()*h); g.bezierCurveTo(w*0.3,Math.random()*h,w*0.7,Math.random()*h,w,Math.random()*h); g.stroke(); }
+    noise(g,w,h,0.10,3500);
+  },rx,ry),
+  intonaco:(rx=1,ry=1)=>canvasTex(512,512,(g,w,h)=>{
+    g.fillStyle='#e6dcc4'; g.fillRect(0,0,w,h);
+    for(let i=0;i<2400;i++){ const v=200+Math.random()*40;
+      g.fillStyle=`rgba(${v},${v-10},${v-34},0.25)`; g.fillRect(Math.random()*w,Math.random()*h,2,2); }
+    g.fillStyle='rgba(150,120,70,0.10)';
+    for(let i=0;i<14;i++){ g.fillRect(0,Math.random()*h,w,1+Math.random()*3); }
+  },rx,ry),
+  affresco:(rx=1,ry=1)=>canvasTex(1024,256,(g,w,h)=>{
+    g.fillStyle='#e6dcc4'; g.fillRect(0,0,w,h);
+    g.fillStyle='#a33b2a'; g.fillRect(0,0,w,26); g.fillRect(0,h-26,w,26);
+    g.fillStyle='#16243d'; g.fillRect(0,30,w,8); g.fillRect(0,h-38,w,8);
+    // fascia di spirali correnti (motivo egeo attestato)
+    g.strokeStyle='#8a2f22'; g.lineWidth=9;
+    const cy=h/2, R=42;
+    for(let x=R+10;x<w;x+=R*1.9){
+      g.beginPath(); g.arc(x,cy,R,Math.PI*0.15,Math.PI*1.85); g.stroke();
+      g.beginPath(); g.arc(x,cy,R*0.55,0,Math.PI*2); g.stroke();
+    }
+    g.strokeStyle='rgba(201,162,39,0.8)'; g.lineWidth=3;
+    for(let x=R+10;x<w;x+=R*1.9){ g.beginPath(); g.arc(x,cy,R*0.3,0,Math.PI*2); g.stroke(); }
+    noise(g,w,h,0.05,1200);
+  },rx,ry),
+  legno:(rx=1,ry=1)=>canvasTex(512,512,(g,w,h)=>{
+    g.fillStyle='#6d4a2c'; g.fillRect(0,0,w,h);
+    for(let i=0;i<70;i++){ const x=Math.random()*w;
+      g.strokeStyle=`rgba(${40+Math.random()*30},${26+Math.random()*20},${12+Math.random()*12},${0.3+Math.random()*0.4})`;
+      g.lineWidth=1+Math.random()*3;
+      g.beginPath(); g.moveTo(x,0); g.bezierCurveTo(x+8,h*0.3,x-8,h*0.7,x+4,h); g.stroke(); }
+  },rx,ry),
+  terra:(rx=1,ry=1)=>canvasTex(1024,1024,(g,w,h)=>{
+    g.fillStyle='#a08d5e'; g.fillRect(0,0,w,h);
+    for(let i=0;i<9000;i++){
+      const t=Math.random();
+      g.fillStyle=t<0.42?`rgba(${120+Math.random()*50},${110+Math.random()*40},${60+Math.random()*30},0.5)`
+        : t<0.75?`rgba(${140+Math.random()*40},${125+Math.random()*35},${80+Math.random()*30},0.45)`
+        :`rgba(${95+Math.random()*40},${105+Math.random()*40},${55+Math.random()*25},0.4)`;
+      g.fillRect(Math.random()*w,Math.random()*h,2+Math.random()*4,2+Math.random()*3);
+    }
+    for(let i=0;i<300;i++){ const v=130+Math.random()*60;
+      g.fillStyle=`rgba(${v},${v-8},${v-25},0.8)`;
+      g.beginPath(); g.arc(Math.random()*w,Math.random()*h,1+Math.random()*3,0,7); g.fill(); }
+  },rx,ry),
+  roccia:(rx=1,ry=1)=>canvasTex(512,512,(g,w,h)=>{
+    g.fillStyle='#7d7466'; g.fillRect(0,0,w,h);
+    noise(g,w,h,0.25,8000);
+    for(let i=0;i<40;i++){ g.strokeStyle='rgba(50,44,36,0.3)'; g.lineWidth=1+Math.random()*3;
+      g.beginPath(); g.moveTo(Math.random()*w,0); g.lineTo(Math.random()*w,h); g.stroke(); }
+  },rx,ry),
+};
+
+const MATS = {};
+function makeMat(slot,opts={},rx=1,ry=1){
+  const m=new THREE.MeshStandardMaterial(Object.assign({roughness:0.94,metalness:0.0},opts));
+  m.map=PROC[slot](rx,ry); m.map.encoding=THREE.sRGBEncoding;
+  if(['pietra_ciclopica','conglomerato','lastra','terra','roccia'].includes(slot)){
+    m.bumpMap=m.map; m.bumpScale=slot==='terra'?0.12:0.2;
+  }
+  m.userData.slot=slot; m.userData.rep=[rx,ry];
+  (MATS[slot]=MATS[slot]||[]).push(m);
+  return m;
+}
+function tryPhotos(){
+  const loader=new THREE.TextureLoader();
+  SLOTS.forEach(([slot])=>{
+    slotStatus[slot]='procedurale';
+    loader.load('textures/'+slot+'.jpg',tex=>{
+      tex.wrapS=tex.wrapT=THREE.RepeatWrapping; tex.anisotropy=8; tex.encoding=THREE.sRGBEncoding;
+      (MATS[slot]||[]).forEach(m=>{ const t=tex.clone(); t.needsUpdate=true;
+        t.repeat.set(m.userData.rep[0],m.userData.rep[1]); m.map=t; m.needsUpdate=true; });
+      slotStatus[slot]='fotografia'; renderSlotList();
+    },undefined,()=>{ renderSlotList(); });
+  });
+}
+function renderSlotList(){
+  const el=document.getElementById('slotList');
+  el.innerHTML=SLOTS.map(([s,label])=>{
+    const st=slotStatus[s]||'procedurale';
+    return `<div class="slot"><span><b>${s}.jpg</b> — ${label}</span><span class="${st==='fotografia'?'st-foto':'st-proc'}">${st}</span></div>`;
+  }).join('');
+}
+
+/* ---------- scena ---------- */
+const canvas=document.getElementById('scene');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.physicallyCorrectLights=true;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.08;
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+const scene=new THREE.Scene();
+function skyTexture(top='#75a9d4',mid='#d9e5e5',haze='#f3d6a1'){
+  return canvasTex(512,1024,(g,w,h)=>{
+    const gr=g.createLinearGradient(0,0,0,h);
+    gr.addColorStop(0,top);gr.addColorStop(.52,mid);gr.addColorStop(.82,haze);gr.addColorStop(1,'#d6bf8d');
+    g.fillStyle=gr;g.fillRect(0,0,w,h);
+    for(let i=0;i<26;i++){
+      const x=Math.random()*w,y=90+Math.random()*430,rx=35+Math.random()*90,ry=12+Math.random()*28;
+      const cg=g.createRadialGradient(x,y,0,x,y,rx);cg.addColorStop(0,'rgba(255,255,255,.34)');cg.addColorStop(1,'rgba(255,255,255,0)');
+      g.fillStyle=cg;g.beginPath();g.ellipse(x,y,rx,ry,0,0,Math.PI*2);g.fill();
+    }
+  });
+}
+const SKY={day:skyTexture(),gold:skyTexture('#597d9d','#d4cec0','#e5a866'),dusk:skyTexture('#354b68','#967b7a','#d58155')};
+scene.background=SKY.day;
+scene.fog=new THREE.Fog(0xd9d4bf,155,760);
+const artisticGroup=new THREE.Group(); artisticGroup.name='Ipotesi cromatica'; scene.add(artisticGroup);
+const atmosphereGroup=new THREE.Group(); scene.add(atmosphereGroup);
+
+const camera=new THREE.PerspectiveCamera(66,innerWidth/innerHeight,0.1,1600);
+
+const hemi=new THREE.HemisphereLight(0xdcecff,0x8c7650,1.0); scene.add(hemi);
+const ambient=new THREE.AmbientLight(0xfff1d5,0.18);scene.add(ambient);
+const sun=new THREE.DirectionalLight(0xffe4bb,4.2);
+sun.position.set(-240,290,140); sun.castShadow=true;
+sun.shadow.mapSize.set(3072,3072);
+Object.assign(sun.shadow.camera,{left:-230,right:230,top:230,bottom:-230,near:40,far:900});
+sun.shadow.camera.updateProjectionMatrix();
+sun.shadow.bias=-0.00035;
+scene.add(sun); scene.add(sun.target);
+
+function softDiscTexture(inner,outer){
+  return canvasTex(256,256,(g,w,h)=>{const r=w/2,gr=g.createRadialGradient(r,r,0,r,r,r);gr.addColorStop(0,inner);gr.addColorStop(.42,inner);gr.addColorStop(1,outer);g.fillStyle=gr;g.fillRect(0,0,w,h);});
+}
+const sunSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:softDiscTexture('rgba(255,245,205,.95)','rgba(255,205,120,0)'),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));
+sunSprite.position.set(-330,310,-280);sunSprite.scale.set(68,68,1);atmosphereGroup.add(sunSprite);
+const cloudTex=canvasTex(512,256,(g,w,h)=>{
+  g.clearRect(0,0,w,h);
+  [[.22,.58,.20,.25],[.38,.47,.24,.31],[.54,.55,.27,.29],[.7,.59,.18,.22]].forEach(([x,y,rx,ry])=>{
+    const gr=g.createRadialGradient(x*w,y*h,0,x*w,y*h,rx*w);gr.addColorStop(0,'rgba(255,255,255,.65)');gr.addColorStop(.58,'rgba(255,255,255,.36)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.beginPath();g.ellipse(x*w,y*h,rx*w,ry*h,0,0,Math.PI*2);g.fill();
+  });
+});
+for(let i=0;i<14;i++){
+  const c=new THREE.Sprite(new THREE.SpriteMaterial({map:cloudTex,transparent:true,opacity:.34+Math.random()*.28,depthWrite:false}));
+  const a=Math.random()*Math.PI*2,r=370+Math.random()*280;c.position.set(Math.cos(a)*r,135+Math.random()*135,Math.sin(a)*r);c.scale.set(95+Math.random()*150,35+Math.random()*55,1);atmosphereGroup.add(c);
+}
+
+/* ---------- terreno ---------- */
+function terrainH(x,z){
+  const dx=x-20, dz=z-5, d=Math.hypot(dx,dz);
+  let h=26*Math.exp(-(d*d)/(95*95));
+  h=Math.min(h,24);                                        // pianoro del palazzo
+  h-=14*Math.exp(-((z-105)*(z-105))/(38*38))*Math.exp(-((x-10)*(x-10))/(190*190)); // burrone del Chavos
+  const rippleFade=Math.min(1,Math.max(0,(d-28)/20));      // pianoro perfettamente piano
+  h+=1.4*Math.sin(x*0.05)*Math.cos(z*0.06)*rippleFade;
+  return h;
+}
+const matTerra=makeMat('terra',{},26,26);
+{
+  const size=1000, seg=150;
+  const geo=new THREE.PlaneGeometry(size,size,seg,seg);
+  geo.rotateX(-Math.PI/2);
+  const pos=geo.attributes.position;
+  for(let i=0;i<pos.count;i++){ pos.setY(i,terrainH(pos.getX(i),pos.getZ(i))); }
+  geo.computeVertexNormals();
+  const ground=new THREE.Mesh(geo,matTerra);
+  ground.receiveShadow=true; scene.add(ground);
+}
+/* monti: il Profitis Ilias e lo Zara che stringono la cittadella */
+const matRoccia=makeMat('roccia',{},8,4);
+function mountain(x,z,h,r){
+  const g=new THREE.ConeGeometry(r,h,9,4);
+  const p=g.attributes.position;
+  for(let i=0;i<p.count;i++){ p.setX(i,p.getX(i)*(0.85+Math.random()*0.3)); p.setZ(i,p.getZ(i)*(0.85+Math.random()*0.3)); }
+  g.computeVertexNormals();
+  const m=new THREE.Mesh(g,matRoccia); m.position.set(x,h/2-6,z); scene.add(m);
+}
+mountain(300,-190,190,190); mountain(330,180,170,170); mountain(560,0,220,260);
+
+/* ulivi e cipressi nella piana */
+const matLegno=makeMat('legno',{},1,2);
+const matChioma=new THREE.MeshStandardMaterial({color:0x5c6b3a,roughness:1});
+const matCipresso=new THREE.MeshStandardMaterial({color:0x2f4230,roughness:1});
+function olive(x,z){ const y=terrainH(x,z);
+  const tr=new THREE.Mesh(new THREE.CylinderGeometry(0.25,0.4,2.4,6),matLegno);
+  tr.position.set(x,y+1.2,z); tr.castShadow=true; scene.add(tr);
+  const ch=new THREE.Mesh(new THREE.SphereGeometry(1.9,7,6),matChioma);
+  ch.position.set(x,y+3.3,z); ch.scale.y=0.75; ch.castShadow=true; scene.add(ch); }
+function cipresso(x,z){ const y=terrainH(x,z);
+  const c=new THREE.Mesh(new THREE.ConeGeometry(1.1,6.5,7),matCipresso);
+  c.position.set(x,y+3.2,z); c.castShadow=true; scene.add(c); }
+[[-170,30],[-185,-25],[-160,70],[-210,10],[-150,-60],[-190,60],[-230,-40],[60,120],[-40,130],[130,100]].forEach(p=>olive(p[0],p[1]));
+[[-140,15],[-142,22],[-175,-45],[100,115]].forEach(p=>cipresso(p[0],p[1]));
+
+/* ---------- materiali principali ---------- */
+const matCiclop = makeMat('pietra_ciclopica',{},4,1.6);
+const matCiclopBasso = makeMat('pietra_ciclopica',{},2,0.8);
+const matCongl = makeMat('conglomerato',{},1.2,1.2);
+const matLastra = makeMat('lastra',{},1,1);
+const matInton = makeMat('intonaco',{},2,1);
+const matAffresco = makeMat('affresco',{},3,1);
+const matLegnoPorta = makeMat('legno',{},2,2);
+const matColonna = new THREE.MeshStandardMaterial({color:0x9c3524,roughness:0.7});
+const matCapitello = new THREE.MeshStandardMaterial({color:0x1e3050,roughness:0.7});
+const matPav = makeMat('lastra',{},6,6);
+const matTetto = new THREE.MeshStandardMaterial({color:0xb09a6c,roughness:1});
+
+/* ---------- collisioni ---------- */
+const colSegs=[];   // {ax,az,bx,bz,pad,openA,openB}
+function addSeg(ax,az,bx,bz,pad,openA=false,openB=false){ colSegs.push({ax,az,bx,bz,pad,openA,openB}); }
+
+/* muro poligonale che segue il terreno; opts.openA/openB = estremità a filo (varchi) */
+function wall(ax,az,bx,bz,h,thick,mat,extraDown=3,opts={}){
+  const len=Math.hypot(bx-ax,bz-az);
+  const overA=opts.openA?0:thick*0.3, overB=opts.openB?0:thick*0.3;
+  const midx=(ax+bx)/2, midz=(az+bz)/2;
+  const base=Math.min(terrainH(ax,az),terrainH(bx,bz),terrainH(midx,midz))-extraDown;
+  const top=Math.max(terrainH(ax,az),terrainH(bx,bz))+h;
+  const g=new THREE.BoxGeometry(len+overA+overB,top-base,thick);
+  const m=new THREE.Mesh(g,mat);
+  const ux=(bx-ax)/len, uz=(bz-az)/len;
+  m.position.set(midx+ux*(overB-overA)/2,(top+base)/2,midz+uz*(overB-overA)/2);
+  m.rotation.y=-Math.atan2(bz-az,bx-ax);
+  m.castShadow=true; m.receiveShadow=true;
+  scene.add(m);
+  addSeg(ax,az,bx,bz,thick/2+0.45,!!opts.openA,!!opts.openB);
+  return m;
+}
+
+/* ---------- cinta ciclopica ---------- */
+const CIRCUIT=[
+  [-121,-2.4],[-112,-32],[-70,-52],[-15,-62],[25,-60],   // gap Porta Nord tra i due successivi
+  [29,-59.5],[75,-52],[120,-30],[148,2],[118,30],[70,48],[10,55],[-50,50],[-95,32],[-118,10],[-121,2.4]
+];
+for(let i=0;i<CIRCUIT.length-1;i++){
+  if(i===4) continue;                      // apertura della Porta Nord
+  const [ax,az]=CIRCUIT[i],[bx,bz]=CIRCUIT[i+1];
+  const opts={};
+  if(i===0) opts.openA=true;               // fianco nord della Porta dei Leoni
+  if(i===CIRCUIT.length-2) opts.openB=true;// fianco sud della Porta dei Leoni
+  if(i===3) opts.openB=true;               // fianco ovest della Porta Nord
+  if(i===5) opts.openA=true;               // fianco est della Porta Nord
+  wall(ax,az,bx,bz,7.5,5.5,matCiclop,3,opts);
+}
+/* il varco della Porta dei Leoni resta tra l'ultimo e il primo punto */
+
+/* ---------- Porta dei Leoni ---------- */
+(function lionGate(){
+  const gy=terrainH(-121,0);
+  // stipiti in conglomerato (~3.1 m luce reale)
+  const jamb=(z)=>{ const j=new THREE.Mesh(new THREE.BoxGeometry(3.2,3.4,1.1),matCongl);
+    j.position.set(-121,gy+1.7,z); j.castShadow=true; scene.add(j); return j; };
+  jamb(-1.85); jamb(1.85);
+  addSeg(-123.5,-1.85,-118.5,-1.85,0.62); addSeg(-123.5,1.85,-118.5,1.85,0.62);
+  // architrave (4,5 × 2 × 0,8 m circa; ~20 t)
+  const lin=new THREE.Mesh(new THREE.BoxGeometry(3.6,1.1,5.4),matCongl);
+  lin.position.set(-121,gy+3.95,0); lin.castShadow=true; scene.add(lin);
+  // triangolo di scarico con il rilievo
+  const reliefTex=canvasTex(512,512,(g,w,h)=>{
+    g.fillStyle='#9a8f7c'; g.fillRect(0,0,w,h);
+    noise(g,w,h,0.12,3000);
+    g.strokeStyle='rgba(52,45,36,0.9)'; g.fillStyle='rgba(140,130,112,1)';
+    const cx=w/2;
+    // doppio altare
+    g.fillStyle='#877c68'; g.fillRect(cx-70,h-120,140,26); g.fillRect(cx-56,h-146,112,26);
+    // colonna rastremata verso il basso, con capitello
+    g.fillStyle='#8f8472';
+    g.beginPath(); g.moveTo(cx-14,h-146); g.lineTo(cx+14,h-146); g.lineTo(cx+20,h-262); g.lineTo(cx-20,h-262); g.closePath(); g.fill(); g.stroke();
+    g.fillRect(cx-30,h-286,60,24); g.strokeRect(cx-30,h-286,60,24);
+    // due fiere affrontate, zampe sugli altari, teste perdute
+    function fiera(dir){
+      g.save(); g.translate(cx,0); g.scale(dir,1);
+      g.fillStyle='#948a76'; g.strokeStyle='rgba(52,45,36,0.9)'; g.lineWidth=4;
+      g.beginPath();
+      g.moveTo(30,h-150);              // zampa anteriore sull'altare
+      g.lineTo(34,h-210);
+      g.bezierCurveTo(60,h-252,110,h-258,150,h-236);  // dorso
+      g.lineTo(176,h-196);
+      g.bezierCurveTo(196,h-160,196,h-120,182,h-96);  // groppa e coscia
+      g.lineTo(160,h-92); g.lineTo(158,h-138);
+      g.bezierCurveTo(130,h-150,90,h-150,64,h-146);   // ventre
+      g.lineTo(58,h-96); g.lineTo(40,h-96); g.lineTo(44,h-150);
+      g.closePath(); g.fill(); g.stroke();
+      g.restore();
+    }
+    fiera(1); fiera(-1);
+    g.fillStyle='rgba(70,60,46,0.35)'; g.font='italic 20px serif';
+  });
+  const triShape=new THREE.Shape();
+  triShape.moveTo(-2.7,0); triShape.lineTo(2.7,0); triShape.lineTo(0,3.1); triShape.closePath();
+  const triGeo=new THREE.ExtrudeGeometry(triShape,{depth:0.7,bevelEnabled:false});
+  // UV semplici per il rilievo
+  const uv=triGeo.attributes.uv;
+  for(let i=0;i<uv.count;i++){ uv.setXY(i,(uv.getX(i)+2.7)/5.4, uv.getY(i)/3.1); }
+  const reliefMat=new THREE.MeshStandardMaterial({map:reliefTex,roughness:0.95});
+  reliefTex.encoding=THREE.sRGBEncoding;
+  const tri=new THREE.Mesh(triGeo,reliefMat);
+  // R_y(π/2): (a,b,c) → (c,b,−a): il triangolo si distende lungo z, centrato sul varco
+  tri.rotation.y=Math.PI/2;
+  tri.position.set(-121.45,gy+4.55,0);
+  scene.add(tri);
+  // battenti lignei semiaperti verso l'interno
+  [[-1.3,-0.35],[1.3,0.35]].forEach(([hz,rot])=>{
+    const d=new THREE.Mesh(new THREE.BoxGeometry(1.5,3.25,0.16),matLegnoPorta);
+    d.geometry.translate(0.75*Math.sign(hz)*-1,0,0);   // cerniera sul bordo
+    d.position.set(-119.3,gy+1.62,hz);
+    d.rotation.y=rot; d.castShadow=true; scene.add(d);
+  });
+  // bastione a fianco del corridoio d'accesso
+  wall(-121,7.5,-144,9,7,5,matCiclop);
+  wall(-144,9,-146,2,7,4.5,matCiclop);
+})();
+
+/* ---------- Porta Nord ---------- */
+(function northGate(){
+  const gx=27,gz=-59.7, gy=terrainH(gx,gz);
+  const j1=new THREE.Mesh(new THREE.BoxGeometry(0.9,3,3.4),matCongl);
+  j1.position.set(25.45,gy+1.5,gz); j1.castShadow=true; scene.add(j1);
+  const j2=j1.clone(); j2.position.x=28.55; scene.add(j2);
+  const lin=new THREE.Mesh(new THREE.BoxGeometry(4.2,0.9,3.8),matCongl);
+  lin.position.set(gx,gy+3.4,gz); lin.castShadow=true; scene.add(lin);
+  addSeg(25.9,gz-2.5,25.9,gz+2.5,0.5); addSeg(28.1,gz-2.5,28.1,gz+2.5,0.5);
+})();
+
+/* ---------- Circolo A ---------- */
+(function graveCircle(){
+  const cx=-94, cz=18, R=12.5;
+  for(let ring=0; ring<2; ring++){
+    const r=R-ring*1.1;
+    const n=44;
+    for(let i=0;i<n;i++){
+      const a=i/n*Math.PI*2;
+      if(a>4.4 && a<4.9) continue;                     // ingresso a nord, su entrambi gli anelli
+      const x=cx+Math.cos(a)*r, z=cz+Math.sin(a)*r;
+      const s=new THREE.Mesh(new THREE.BoxGeometry(0.28,1.5,1.55),matLastra);
+      s.position.set(x,terrainH(x,z)+0.75,z);
+      s.rotation.y=-a; s.castShadow=true; scene.add(s);
+    }
+  }
+  // lastre di copertura del parapetto
+  const capN=40;
+  for(let i=0;i<capN;i++){
+    const a=i/capN*Math.PI*2;
+    if(a>4.35 && a<4.95) continue;
+    const r=R-0.55, x=cx+Math.cos(a)*r, z=cz+Math.sin(a)*r;
+    const c=new THREE.Mesh(new THREE.BoxGeometry(1.6,0.22,1.9),matLastra);
+    c.position.set(x,terrainH(x,z)+1.58,z); c.rotation.y=-a; c.castShadow=true; scene.add(c);
+  }
+  addSegCircle(cx,cz,R,4.4,4.9);
+  // stele sulle tombe a fossa
+  [[-96,14],[-91,20],[-97,22],[-92,15.5]].forEach(([x,z],i)=>{
+    const st=new THREE.Mesh(new THREE.BoxGeometry(0.9,1.7+0.2*i,0.22),matLastra);
+    st.position.set(x,terrainH(x,z)+0.9,z); st.rotation.y=0.4*i; st.castShadow=true; scene.add(st);
+  });
+})();
+function addSegCircle(cx,cz,R,gapA,gapB){
+  const n=28;
+  for(let i=0;i<n;i++){
+    const a1=i/n*Math.PI*2, a2=(i+1)/n*Math.PI*2;
+    const mid=(a1+a2)/2;
+    if(mid>gapA&&mid<gapB) continue;
+    addSeg(cx+Math.cos(a1)*R,cz+Math.sin(a1)*R,cx+Math.cos(a2)*R,cz+Math.sin(a2)*R,0.7);
+  }
+}
+
+/* ---------- edifici ---------- */
+function building(cx,cz,w,d,h,rot,opts={}){
+  const y=terrainH(cx,cz);
+  const grp=new THREE.Group(); grp.position.set(cx,y,cz); grp.rotation.y=rot;
+  const wallMat=opts.mat||matInton;
+  const t=0.35;
+  const mk=(gx,gz,gw,gd,gh,gy=0)=>{ const b=new THREE.Mesh(new THREE.BoxGeometry(gw,gh,gd),wallMat);
+    b.position.set(gx,gy+gh/2,gz); b.castShadow=true; b.receiveShadow=true; grp.add(b); };
+  // quattro pareti, porta sul lato frontale (+d/2)
+  mk(0,-d/2, w, t, h);
+  mk(-w/2,0, t, d, h);
+  mk(w/2,0, t, d, h);
+  const dw=1.2;
+  mk(-(w/4+dw/4), d/2, w/2-dw/2, t, h);
+  mk( (w/4+dw/4), d/2, w/2-dw/2, t, h);
+  mk(0, d/2, dw+0.4, t, h-2.1, 2.1);                   // sopra-porta
+  const lint=new THREE.Mesh(new THREE.BoxGeometry(dw+0.6,0.22,0.5),matLegnoPorta);
+  lint.position.set(0,2.1,d/2); grp.add(lint);
+  // tetto piano d'argilla su travi
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(w+0.7,0.3,d+0.7),matTetto);
+  roof.position.y=h+0.15; roof.castShadow=true; grp.add(roof);
+  for(let i=0;i<Math.floor(w/1.1);i++){
+    const beam=new THREE.Mesh(new THREE.BoxGeometry(0.16,0.16,d+1),matLegnoPorta);
+    beam.position.set(-w/2+0.6+i*1.1,h-0.1,0); grp.add(beam);
+  }
+  scene.add(grp);
+  // collisioni (AABB ruotata → uso segmenti)
+  const cs=Math.cos(rot), sn=Math.sin(rot);
+  const P=(lx,lz)=>[cx+lx*cs+lz*sn, cz-lx*sn+lz*cs];
+  const c1=P(-w/2,-d/2),c2=P(w/2,-d/2),c3=P(w/2,d/2),c4=P(-w/2,d/2);
+  addSeg(c1[0],c1[1],c2[0],c2[1],0.5);
+  addSeg(c2[0],c2[1],c3[0],c3[1],0.5);
+  addSeg(c4[0],c4[1],c3[0],c3[1],0.5);
+  const g1=P(-w/2,d/2), g2=P(-dw/2-0.1,d/2), g3=P(dw/2+0.1,d/2), g4=P(w/2,d/2);
+  addSeg(g1[0],g1[1],g2[0],g2[1],0.5); addSeg(g3[0],g3[1],g4[0],g4[1],0.5);
+  return grp;
+}
+/* Granaio, subito dentro la porta */
+building(-108,-11,10,7,4,0.25);
+/* case sulle terrazze */
+building(-56,28,8,6,3.6,0.3);
+building(-36,38,9,6.5,3.8,-0.2);
+building(-20,26,7,5.5,3.4,0.5);
+/* Centro di culto, pendio sud-ovest, con altare */
+(function cult(){
+  building(-66,40,11,8,4.2,0.15);
+  const ax=-60.5,az=34.6,ay=terrainH(ax,az);
+  const alt=new THREE.Mesh(new THREE.BoxGeometry(1.6,0.9,1.6),matLastra);
+  alt.position.set(ax,ay+0.45,az); alt.castShadow=true; scene.add(alt);
+  const alt2=new THREE.Mesh(new THREE.BoxGeometry(1.1,0.35,1.1),matLastra);
+  alt2.position.set(ax,ay+1.05,az); scene.add(alt2);
+})();
+
+/* ---------- rampa: muri di sostegno ---------- */
+wall(-112,5,-74,10,2.4,2.2,matCiclopBasso,2);
+wall(-112,-4,-80,-8,2.4,2.2,matCiclopBasso,2);
+
+/* ---------- palazzo: corte e megaron ---------- */
+(function palace(){
+  const PY=24;  // quota del pianoro
+  // corte lastricata
+  const court=new THREE.Mesh(new THREE.BoxGeometry(16,0.25,13),matPav);
+  court.position.set(7,PY+0.05,2); court.receiveShadow=true; scene.add(court);
+  // propylon d'ingresso alla corte (ovest)
+  colOne(-1.5,PY,-1.2); colOne(-1.5,PY,5.2);
+  const propRoof=new THREE.Mesh(new THREE.BoxGeometry(3.4,0.35,9),matTetto);
+  propRoof.position.set(-1.5,PY+4.4,2); propRoof.castShadow=true; scene.add(propRoof);
+
+  // ---- megaron: aithousa 16.5→21.5, prodomos →26.5, domos →39 ----
+  const zN=-3.75, zS=7.75, H=5.6, t=0.5;
+  const wallP=(x1,x2,z,down=0.5)=>{ const b=new THREE.Mesh(new THREE.BoxGeometry(x2-x1,H+down,t),matInton);
+    b.position.set((x1+x2)/2,PY+H/2-down/2,z);
+    b.castShadow=true;b.receiveShadow=true;scene.add(b); addSeg(x1,z,x2,z,t/2+0.35); return b; };
+  const wallX=(z1,z2,x)=>{ const b=new THREE.Mesh(new THREE.BoxGeometry(t,H+0.5,z2-z1),matInton);
+    b.position.set(x,PY+H/2-0.25,(z1+z2)/2); b.castShadow=true;b.receiveShadow=true;scene.add(b);
+    addSeg(x,z1,x,z2,t/2+0.35); return b; };
+  // muri lunghi
+  wallP(16.5,39,zN); wallP(16.5,39,zS);
+  // fondo est
+  wallX(zN,zS,39);
+  // ante del portico
+  wallX(zN,zN+0.9,16.5); wallX(zS-0.9,zS,16.5);
+  // tramezzo aithousa/prodomos con porta centrale
+  wallX(zN,0.7,21.5); wallX(3.3,zS,21.5);
+  // tramezzo prodomos/domos con porta
+  wallX(zN,0.7,26.5); wallX(3.3,zS,26.5);
+  // colonne del portico
+  colOne(17.6,PY,-0.6); colOne(17.6,PY,4.6);
+  // pavimento dipinto a scacchiera del domos
+  const floorTex=canvasTex(512,512,(g,w,h)=>{
+    const cols=['#b8543c','#e6dcc4','#3a5a7a','#c9a227'];
+    const n=8,s=w/n;
+    for(let i=0;i<n;i++)for(let j=0;j<n;j++){ g.fillStyle=cols[(i*3+j*5)%4]; g.fillRect(i*s,j*s,s,s);
+      g.strokeStyle='rgba(40,34,26,0.5)'; g.strokeRect(i*s,j*s,s,s); }
+    noise(g,w,h,0.08,2000);
+  },2,2);
+  floorTex.encoding=THREE.sRGBEncoding;
+  const domFloor=new THREE.Mesh(new THREE.BoxGeometry(12.5,0.22,11.5),
+    new THREE.MeshStandardMaterial({map:floorTex,roughness:0.9}));
+  domFloor.position.set(32.75,PY+0.11,2); domFloor.receiveShadow=true; scene.add(domFloor);
+  // fascia affrescata interna del domos
+  const fr1=new THREE.Mesh(new THREE.PlaneGeometry(12.4,1.3),matAffresco);
+  fr1.position.set(32.7,PY+3.4,zN+0.62); scene.add(fr1);
+  const fr2=fr1.clone(); fr2.rotation.y=Math.PI; fr2.position.z=zS-0.62; scene.add(fr2);
+  // focolare centrale (~3,4 m) tra quattro colonne
+  const hearth=new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.8,0.5,28),
+    new THREE.MeshStandardMaterial({color:0xa33b2a,roughness:0.9}));
+  hearth.position.set(32.8,PY+0.35,2); hearth.castShadow=true; scene.add(hearth);
+  const ember=new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.1,0.14,20),
+    new THREE.MeshStandardMaterial({color:0xff7a1e,emissive:0xe0561a,emissiveIntensity:1.4,roughness:1}));
+  ember.position.set(32.8,PY+0.62,2); scene.add(ember);
+  window.__hearthLight=new THREE.PointLight(0xff9a40,1.5,26,2);
+  __hearthLight.position.set(32.8,PY+2.2,2); scene.add(__hearthLight);
+  addSegCircle(32.8,2,1.9,-1,-1);
+  [[30.5,-0.3],[30.5,4.3],[35,-0.3],[35,4.3]].forEach(p=>colOne(p[0],PY,p[1]));
+  // trono presso la parete sud
+  const throne=new THREE.Group();
+  const tb=new THREE.Mesh(new THREE.BoxGeometry(1.3,0.55,1.1),matLastra); tb.position.y=0.27; throne.add(tb);
+  const ts=new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,0.22),matLegnoPorta); ts.position.set(0,0.95,0.44); throne.add(ts);
+  throne.position.set(33,PY+0.11,6.6); throne.rotation.y=Math.PI; scene.add(throne);
+  // copertura piana + lucernario (ipotesi) sopra il focolare
+  const roof1=new THREE.Mesh(new THREE.BoxGeometry(23.6,0.4,12.6),matTetto);
+  roof1.position.set(27.75,PY+H+0.2,2); roof1.castShadow=true; scene.add(roof1);
+  const lant=new THREE.Mesh(new THREE.BoxGeometry(4.6,1.5,4.6),matInton);
+  lant.position.set(32.8,PY+H+1.15,2); lant.castShadow=true; scene.add(lant);
+  const lantRoof=new THREE.Mesh(new THREE.BoxGeometry(5.4,0.3,5.4),matTetto);
+  lantRoof.position.set(32.8,PY+H+2.0,2); scene.add(lantRoof);
+  // annessi a nord del megaron
+  building(24,-12,9,7,4,0);
+  building(36,-13,7,6,3.8,0.1);
+})();
+function colOne(x,baseY,z){
+  // colonna micenea: lignea, rastremata verso il basso, fusto rosso e capitello scuro
+  const c=new THREE.Mesh(new THREE.CylinderGeometry(0.34,0.26,3.9,14),matColonna);
+  c.position.set(x,baseY+1.95+0.15,z); c.castShadow=true; scene.add(c);
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(0.42,0.46,0.3,14),matLastra);
+  base.position.set(x,baseY+0.15,z); scene.add(base);
+  const cap=new THREE.Mesh(new THREE.CylinderGeometry(0.52,0.36,0.42,14),matCapitello);
+  cap.position.set(x,baseY+4.25,z); cap.castShadow=true; scene.add(cap);
+  addSegCircle(x,z,0.45,-1,-1);
+}
+
+/* ---------- cisterna sotterranea ---------- */
+const CIST={ x0:103, z0:-33, dirx:0, dirz:0, len:30, drop:12, entryH:0 };
+(function cistern(){
+  const dx=128-CIST.x0, dz=-52-CIST.z0, L=Math.hypot(dx,dz);
+  CIST.dirx=dx/L; CIST.dirz=dz/L; CIST.entryH=terrainH(CIST.x0,CIST.z0);
+  // portale d'ingresso
+  const gy=CIST.entryH;
+  const j=new THREE.Mesh(new THREE.BoxGeometry(0.7,2.6,0.7),matCiclopBasso);
+  const perp=[-CIST.dirz,CIST.dirx];
+  const p1=j.clone(); p1.position.set(CIST.x0+perp[0]*1.3,gy+1.3,CIST.z0+perp[1]*1.3); scene.add(p1);
+  const p2=j.clone(); p2.position.set(CIST.x0-perp[0]*1.3,gy+1.3,CIST.z0-perp[1]*1.3); scene.add(p2);
+  const lin=new THREE.Mesh(new THREE.BoxGeometry(3.2,0.6,0.9),matCiclopBasso);
+  lin.position.set(CIST.x0,gy+2.9,CIST.z0); lin.rotation.y=Math.atan2(-CIST.dirz,CIST.dirx)+Math.PI/2; scene.add(lin);
+  // corridoio a mensola: segmenti discendenti
+  const steps=16;
+  for(let i=0;i<steps;i++){
+    const t0=i/steps, t1=(i+1)/steps, tm=(t0+t1)/2;
+    const cx=CIST.x0+CIST.dirx*CIST.len*tm, cz=CIST.z0+CIST.dirz*CIST.len*tm;
+    const fy=gy - CIST.drop*tm;
+    const segLen=CIST.len/steps+0.3;
+    const rot=Math.atan2(-CIST.dirz,CIST.dirx);
+    const mk=(off,w,h,y)=>{ const b=new THREE.Mesh(new THREE.BoxGeometry(segLen,h,w),matCiclopBasso);
+      b.position.set(cx+perp[0]*off,y,cz+perp[1]*off); b.rotation.y=rot; scene.add(b); };
+    mk(0, 3.4, 0.5, fy-0.25);                 // pavimento a gradoni
+    mk( 1.55, 0.7, 3.6, fy+1.55);             // parete
+    mk(-1.55, 0.7, 3.6, fy+1.55);             // parete
+    mk(0, 3.8, 0.6, fy+3.3);                  // copertura a mensola
+  }
+  // acqua in fondo
+  const wx=CIST.x0+CIST.dirx*CIST.len, wz=CIST.z0+CIST.dirz*CIST.len;
+  const water=new THREE.Mesh(new THREE.CircleGeometry(1.6,20),
+    new THREE.MeshStandardMaterial({color:0x0d2438,roughness:0.15,metalness:0.4}));
+  water.rotation.x=-Math.PI/2; water.position.set(wx,gy-CIST.drop+0.06,wz); scene.add(water);
+  const torch=new THREE.PointLight(0xff9a40,1.1,14,2);
+  torch.position.set(CIST.x0+CIST.dirx*4,gy-1.0,CIST.z0+CIST.dirz*4); scene.add(torch);
+  const deep=new THREE.PointLight(0x4a7aa0,0.8,10,2);
+  deep.position.set(wx,gy-CIST.drop+1.4,wz); scene.add(deep);
+})();
+function cisternInfo(x,z){
+  const rx=x-CIST.x0, rz=z-CIST.z0;
+  const along=rx*CIST.dirx+rz*CIST.dirz;
+  const lat=rx*(-CIST.dirz)+rz*(CIST.dirx);
+  return {along,lat};
+}
+
+/* ---------- arricchimento scenografico ---------- */
+function groundRibbon(x0,z0,x1,z1,width,mat,segments=60){
+  const len=Math.hypot(x1-x0,z1-z0),g=new THREE.PlaneGeometry(len,width,segments,5);g.rotateX(-Math.PI/2);
+  const a=Math.atan2(z1-z0,x1-x0),cs=Math.cos(a),sn=Math.sin(a),pos=g.attributes.position;
+  for(let i=0;i<pos.count;i++){
+    const lx=pos.getX(i),lz=pos.getZ(i),wx=(x0+x1)/2+lx*cs-lz*sn,wz=(z0+z1)/2+lx*sn+lz*cs;
+    pos.setY(i,terrainH(wx,wz)+.055);pos.setX(i,wx);pos.setZ(i,wz);
+  }
+  g.computeVertexNormals();const m=new THREE.Mesh(g,mat);m.receiveShadow=true;scene.add(m);return m;
+}
+const roadTex=canvasTex(1024,1024,(g,w,h)=>{
+  g.fillStyle='#a68d68';g.fillRect(0,0,w,h);
+  const rows=12,rh=h/rows;
+  for(let r=0;r<rows;r++){
+    let x=-50+(r%2)*35;
+    while(x<w){const bw=70+Math.random()*95,bh=rh*(.72+Math.random()*.25),yy=r*rh+(Math.random()-.5)*8;
+      const v=143+Math.random()*42;g.fillStyle=`rgb(${v},${v-13},${v-31})`;g.strokeStyle='rgba(67,52,35,.62)';g.lineWidth=5;
+      g.beginPath();g.roundRect(x,yy,bw,bh,8);g.fill();g.stroke();x+=bw+7+Math.random()*8;}
+  }
+  noise(g,w,h,.08,7000);
+},5,1.2);roadTex.encoding=THREE.sRGBEncoding;
+const roadMat=new THREE.MeshStandardMaterial({map:roadTex,bumpMap:roadTex,bumpScale:.16,roughness:.97});
+groundRibbon(-187,0,-114,0,10.5,roadMat,80);
+groundRibbon(-117,0,-76,3.5,7.4,roadMat,45);
+
+function rock(x,z,s=.5){const y=terrainH(x,z);const m=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),matRoccia);m.position.set(x,y+s*.38,z);m.scale.set(1.3,.65,.9);m.rotation.set(Math.random(),Math.random(),Math.random());m.castShadow=true;m.receiveShadow=true;scene.add(m);}
+for(let i=0;i<52;i++){const x=-185+Math.random()*75,z=(Math.random()<.5?-1:1)*(6+Math.random()*7);rock(x,z,.18+Math.random()*.52);}
+
+function shrub(x,z,scale=1){const y=terrainH(x,z),grp=new THREE.Group();grp.position.set(x,y,z);for(let i=0;i<5;i++){const m=new THREE.Mesh(new THREE.IcosahedronGeometry(.55+Math.random()*.28,1),new THREE.MeshStandardMaterial({color:i%2?0x52683c:0x65754b,roughness:1}));m.position.set((Math.random()-.5)*1.1,.35+Math.random()*.45,(Math.random()-.5)*.9);m.scale.set(1.15,.72,1);m.castShadow=true;grp.add(m);}grp.scale.setScalar(scale);scene.add(grp);}
+function flowers(x,z,count=10){const y=terrainH(x,z);for(let i=0;i<count;i++){const stem=new THREE.Mesh(new THREE.CylinderGeometry(.012,.018,.35,4),new THREE.MeshStandardMaterial({color:0x536b36}));stem.position.set(x+(Math.random()-.5)*2,y+.17,z+(Math.random()-.5)*1.7);const c=[0xb54b42,0xd69d59,0xe7d6b0][i%3];const f=new THREE.Mesh(new THREE.SphereGeometry(.055,6,4),new THREE.MeshStandardMaterial({color:c}));f.position.copy(stem.position);f.position.y+=.2;scene.add(stem,f);}}
+[[-146,-11,1.1],[-139,11,1.25],[-128,-10,1],[-119,12,.9],[-108,-15,1.25],[-99,15,1.05]].forEach(p=>{shrub(...p);flowers(p[0],p[1],8);});
+
+function richerCypress(x,z,scale=1){const y=terrainH(x,z),grp=new THREE.Group();grp.position.set(x,y,z);const tr=new THREE.Mesh(new THREE.CylinderGeometry(.14,.23,4.2,7),matLegno);tr.position.y=2;tr.castShadow=true;grp.add(tr);for(let i=0;i<6;i++){const c=new THREE.Mesh(new THREE.ConeGeometry(.9-i*.08,2.7,9),new THREE.MeshStandardMaterial({color:i%2?0x263c2d:0x314b35,roughness:1}));c.position.y=2.8+i*.72;c.castShadow=true;grp.add(c);}grp.scale.setScalar(scale);scene.add(grp);}
+richerCypress(-136,-15,1.25);richerCypress(-108,16,1.15);richerCypress(-85,-18,.95);
+
+function amphora(x,z,scale=1,color=0x9e4d32){const y=terrainH(x,z),grp=new THREE.Group();const clay=new THREE.MeshStandardMaterial({color,roughness:.82});const body=new THREE.Mesh(new THREE.SphereGeometry(.55,18,12),clay);body.scale.y=1.28;body.position.y=.7;body.castShadow=true;grp.add(body);const neck=new THREE.Mesh(new THREE.CylinderGeometry(.19,.28,.56,16),clay);neck.position.y=1.38;grp.add(neck);const rim=new THREE.Mesh(new THREE.TorusGeometry(.21,.055,8,18),clay);rim.rotation.x=Math.PI/2;rim.position.y=1.68;grp.add(rim);for(const side of [-1,1]){const h=new THREE.Mesh(new THREE.TorusGeometry(.28,.045,7,14,Math.PI),clay);h.rotation.z=Math.PI/2;h.position.set(side*.39,1.25,0);grp.add(h);}const band=new THREE.Mesh(new THREE.TorusGeometry(.49,.035,8,24),new THREE.MeshStandardMaterial({color:0x202d35,roughness:.8}));band.rotation.x=Math.PI/2;band.position.y=.72;grp.add(band);grp.position.set(x,y,z);grp.scale.setScalar(scale);scene.add(grp);return grp;}
+amphora(-132,9.8,1.35);amphora(-129.8,10.9,.9,0xb46b3d);amphora(-113,-9.5,1.15);amphora(-109.5,-10,.85,0xb26a39);
+
+function cart(x,z,rot=0){const y=terrainH(x,z),grp=new THREE.Group();grp.position.set(x,y,z);grp.rotation.y=rot;const wood=new THREE.MeshStandardMaterial({color:0x5b3b23,roughness:.9});const bed=new THREE.Mesh(new THREE.BoxGeometry(3.8,.35,1.7),wood);bed.position.y=1.05;bed.castShadow=true;grp.add(bed);for(const sz of [-.78,.78]){const side=new THREE.Mesh(new THREE.BoxGeometry(3.8,.65,.12),wood);side.position.set(0,1.45,sz);grp.add(side);}for(const side of [-1,1]){const wheel=new THREE.Mesh(new THREE.TorusGeometry(.82,.095,10,26),wood);wheel.rotation.y=Math.PI/2;wheel.position.set(-.85,.82,side*1.02);wheel.castShadow=true;grp.add(wheel);for(let i=0;i<8;i++){const sp=new THREE.Mesh(new THREE.BoxGeometry(.055,1.45,.055),wood);sp.position.copy(wheel.position);sp.rotation.x=i*Math.PI/4;grp.add(sp);}}const shaft=new THREE.Mesh(new THREE.BoxGeometry(4.5,.11,.11),wood);shaft.position.set(3.7,.88,0);grp.add(shaft);scene.add(grp);return grp;}
+cart(-137,12.7,.04);
+
+function person(x,z,rot=0,scale=1,tunic=0xa36a45){const y=terrainH(x,z),grp=new THREE.Group();const skin=new THREE.MeshStandardMaterial({color:0xb98258,roughness:.9}),cloth=new THREE.MeshStandardMaterial({color:tunic,roughness:1});const body=new THREE.Mesh(new THREE.ConeGeometry(.38,.7,8),cloth);body.position.y=1.05;grp.add(body);const head=new THREE.Mesh(new THREE.SphereGeometry(.18,10,8),skin);head.position.y=1.58;grp.add(head);for(const side of [-1,1]){const leg=new THREE.Mesh(new THREE.CylinderGeometry(.055,.065,.65,6),skin);leg.position.set(side*.12,.38,0);grp.add(leg);}grp.position.set(x,y,z);grp.rotation.y=rot;grp.scale.setScalar(scale);scene.add(grp);return grp;}
+person(-110,1.6,.2,1.05,0xa75c3c);person(-106,-2.1,-.3,.95,0x445d68);person(-102,4.2,.6,.9,0xb28a50);person(-94,-1.5,-.4,.88,0x6b4a59);
+
+function paintedBand(x,y,z,w,h,rot=0){const tex=canvasTex(1024,180,(g,W,H)=>{g.fillStyle='#1d3650';g.fillRect(0,0,W,H);g.fillStyle='#a94b35';g.fillRect(0,0,W,24);g.fillRect(0,H-24,W,24);g.strokeStyle='#d8a75e';g.lineWidth=7;for(let px=28;px<W;px+=72){g.beginPath();g.arc(px,H/2,22,0,Math.PI*2);g.stroke();g.fillStyle='#a94b35';g.beginPath();g.arc(px,H/2,8,0,Math.PI*2);g.fill();}} ,3,1);tex.encoding=THREE.sRGBEncoding;const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshStandardMaterial({map:tex,roughness:.8,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));m.position.set(x,y,z);m.rotation.y=rot;m.castShadow=false;artisticGroup.add(m);return m;}
+// Fasce decorative volutamente attivabili: suggestione cromatica, non dato certo.
+paintedBand(-122.66,terrainH(-121,0)+4.52,0,5.25,.65,Math.PI/2);
+paintedBand(-122.71,terrainH(-121,0)+2.55,-4.9,6.4,.55,Math.PI/2);
+paintedBand(-122.71,terrainH(-121,0)+2.55,4.9,6.4,.55,Math.PI/2);
+
+(function relief3D(){const gy=terrainH(-121,0),grp=new THREE.Group();grp.position.set(-122.82,gy+5.35,0);grp.rotation.y=Math.PI/2;const stone=new THREE.MeshStandardMaterial({color:0xa89a82,roughness:.92});const dark=new THREE.MeshStandardMaterial({color:0x80745f,roughness:1});const altar=new THREE.Mesh(new THREE.BoxGeometry(1.25,.18,.25),dark);altar.position.y=-.72;grp.add(altar);const alt2=altar.clone();alt2.scale.set(.72,1,1);alt2.position.y=-.5;grp.add(alt2);const col=new THREE.Mesh(new THREE.CylinderGeometry(.1,.16,1.45,12),stone);col.position.y=.16;grp.add(col);const cap=new THREE.Mesh(new THREE.BoxGeometry(.48,.16,.24),stone);cap.position.y=.94;grp.add(cap);for(const side of [-1,1]){const body=new THREE.Mesh(new THREE.SphereGeometry(.42,14,10),stone);body.scale.set(1.3,.7,.23);body.position.set(side*.83,-.02,.02);grp.add(body);const chest=new THREE.Mesh(new THREE.SphereGeometry(.27,12,8),stone);chest.scale.set(.75,1.15,.25);chest.position.set(side*.48,.12,.02);grp.add(chest);const leg=new THREE.Mesh(new THREE.CylinderGeometry(.075,.09,.68,8),stone);leg.position.set(side*.52,-.39,.02);leg.rotation.z=side*.12;grp.add(leg);const fore=new THREE.Mesh(new THREE.CylinderGeometry(.06,.075,.62,8),stone);fore.position.set(side*.35,-.35,.02);fore.rotation.z=-side*.26;grp.add(fore);const head=new THREE.Mesh(new THREE.SphereGeometry(.18,10,8),stone);head.position.set(side*.33,.48,.02);grp.add(head);}artisticGroup.add(grp);})();
+
+// Avatar minimale per la terza persona.
+const avatar=new THREE.Group();
+const avBody=new THREE.Mesh(new THREE.ConeGeometry(.35,.78,10),new THREE.MeshStandardMaterial({color:0x9b5b3e,roughness:1}));avBody.position.y=1.02;avatar.add(avBody);
+const avHead=new THREE.Mesh(new THREE.SphereGeometry(.18,12,9),new THREE.MeshStandardMaterial({color:0xb78259,roughness:1}));avHead.position.y=1.58;avatar.add(avHead);
+const avCape=new THREE.Mesh(new THREE.PlaneGeometry(.72,.9),new THREE.MeshStandardMaterial({color:0x344e58,side:THREE.DoubleSide,roughness:1}));avCape.position.set(-.04,1.05,.18);avCape.rotation.x=.08;avatar.add(avCape);avatar.visible=false;scene.add(avatar);
+
+/* ---------- hotspot didattici ---------- */
+const HOTSPOTS=[
+ { x:-126,z:0, r:9, over:'Ingresso monumentale · ~1250 a.C.', name:'La Porta dei Leoni',
+   body:`<span class="tag att">Attestato</span>
+   <p>Costruita intorno al 1250 a.C. insieme all’ampliamento occidentale della cinta. Stipiti, soglia e
+   architrave sono in conglomerato locale; il solo architrave pesa circa venti tonnellate. Sopra di esso,
+   il triangolo di scarico alleggerisce la muratura e ospita il più antico rilievo monumentale d’Europa:
+   due fiere affrontate poggiano le zampe su altari, ai lati di una colonna rastremata verso il basso —
+   simbolo, con ogni probabilità, del palazzo e del potere che custodisce.</p>
+   <span class="tag ipo">Ipotesi</span>
+   <p>Le teste degli animali, lavorate a parte in altro materiale e fissate con perni, sono perdute:
+   forse erano rivolte verso chi arrivava. Leonesse, leoni o grifoni? La questione resta aperta.
+   I battenti lignei a due ante sono dedotti dagli incassi dei cardini nella soglia: qui li vedi
+   semiaperti, una scelta di regia, non un dato.</p>` },
+ { x:-134,z:5, r:6, over:'Architettura militare', name:'Il bastione e il corridoio d’accesso',
+   body:`<span class="tag att">Attestato</span>
+   <p>La porta non si apre direttamente nella cinta: un bastione avanzato crea un corridoio obbligato
+   che rallenta e incanala chi arriva.</p>
+   <span class="tag ipo">Lettura tradizionale</span>
+   <p>Si ripete spesso che il corridoio esponesse il fianco destro degli attaccanti — quello non coperto
+   dallo scudo — ai difensori sul bastione. È una lettura plausibile ma moderna: i costruttori non ci
+   hanno lasciato il loro manuale di assedio.</p>` },
+ { x:-108,z:-11, r:7, over:'Annona della cittadella', name:'Il «Granaio»',
+   body:`<span class="tag att">Attestato</span>
+   <p>Il nome è convenzionale: negli ambienti seminterrati furono trovati pithoi con orzo, grano e
+   vecce carbonizzati dall’incendio che distrusse l’edificio intorno al 1200 a.C.</p>
+   <span class="tag ipo">Licenza dichiarata</span>
+   <p>La sua fase edilizia principale è probabilmente di poco successiva al 1250: lo includo comunque,
+   perché mostra una funzione essenziale della cittadella — accumulare e ridistribuire. Un palazzo
+   miceneo è prima di tutto un’economia amministrata.</p>` },
+ { x:-94,z:18, r:15, over:'Memoria degli antenati', name:'Il Circolo A delle tombe reali',
+   body:`<span class="tag att">Attestato</span>
+   <p>Le sei tombe a fossa qui racchiuse sono del XVI secolo a.C.: trecento anni più antiche delle mura
+   che le circondano. Vi scavò Schliemann nel 1876, trovando le maschere d’oro — compresa quella che
+   battezzò, senza fondamento, «di Agamennone». Intorno al 1250 la nuova cinta fu deviata apposta per
+   includere il circolo, e il recinto fu rifatto con questo doppio anello di lastre.</p>
+   <span class="tag att">Attestato — e decisivo</span>
+   <p>Questo è il dato più eloquente del sito: i Micenei del XIII secolo veneravano già quelle tombe
+   come memoria ancestrale. La cittadella custodisce il proprio passato prima ancora che noi
+   custodissimo il suo.</p>` },
+ { x:-95,z:2, r:8, over:'Salita al palazzo', name:'La grande rampa',
+   body:`<span class="tag att">Attestato</span>
+   <p>Dalla porta, una rampa carrabile sostenuta da muri di terrazzamento saliva verso il palazzo:
+   percorso di processioni, di tributi, di carri. L’architettura organizza il movimento come gerarchia:
+   si sale verso il potere.</p>
+   <span class="tag ipo">Ipotesi</span>
+   <p>Il tracciato superiore, oltre la prima rampa, è ricostruito per congettura: i rifacimenti
+   ellenistici e i crolli ne hanno cancellato gran parte.</p>` },
+ { x:-64,z:38, r:9, over:'Religione di cittadella', name:'Il Centro di culto',
+   body:`<span class="tag att">Attestato</span>
+   <p>Sul pendio sud-occidentale, un complesso di sacelli e ambienti ha restituito idoli fittili dalle
+   braccia levate, serpenti d’argilla, altari e affreschi — tra cui la cosiddetta dea con le spighe.
+   Religione domestica e ufficiale insieme, a pochi passi dalle tombe venerate.</p>
+   <span class="tag ipo">Ipotesi</span>
+   <p>Gli alzati e i percorsi interni sono ricostruiti; l’altare che vedi all’aperto sintetizza
+   installazioni trovate in più punti del complesso.</p>` },
+ { x:7,z:2, r:10, over:'Cuore del potere · quota 24 m', name:'La corte e il megaron',
+   body:`<span class="tag att">Attestato</span>
+   <p>Sequenza canonica del palazzo miceneo: corte lastricata, portico a due colonne (aithousa),
+   vestibolo (prodomos), sala del trono (domos) con grande focolare circolare tra quattro colonne
+   lignee. Il pavimento era dipinto a riquadri; il trono stava presso la parete sud.</p>
+   <span class="tag ipo">Ipotesi</span>
+   <p>La parete sud del megaron reale è crollata nel burrone del Chavos: quota, coperture, lucernario
+   sopra il focolare e colori sono ricostruzioni verosimili, modellate anche sul confronto con Pilo,
+   dove il megaron si è conservato meglio.</p>` },
+ { x:32.8,z:2, r:6.5, over:'La sala del trono', name:'Il focolare del wanax',
+   body:`<span class="tag att">Attestato</span>
+   <p>Il focolare, circa tre metri e mezzo di diametro, era il centro fisico e simbolico del regno:
+   attorno al fuoco perpetuo il wanax — il signore — riceveva, offriva, decideva. Le tavolette in
+   lineare B di altri palazzi ci restituiscono la sua burocrazia: razioni, bronzo, rematori, offerte.</p>
+   <span class="tag ipo">Ipotesi</span>
+   <p>Il lucernario che lascia uscire il fumo, l’intensità della luce, la fascia a spirali correnti
+   sulle pareti: tutto verosimile, nulla certo. Qui la ricostruzione dichiara più che altrove la
+   propria natura di congettura disciplinata.</p>` },
+ { x:27,z:-56, r:8, over:'Accesso settentrionale', name:'La Porta Nord',
+   body:`<span class="tag att">Attestato</span>
+   <p>Porta secondaria coeva alla Porta dei Leoni e costruita con la stessa tecnica — stipiti monolitici
+   e architrave in conglomerato — ma senza rilievo. L’immagine del potere si concentra dove passa chi
+   deve vederla: l’ingresso principale.</p>` },
+ { x:103,z:-33, r:8, over:'Ingegneria dell’assedio', name:'La cisterna sotterranea',
+   body:`<span class="tag att">Attestato</span>
+   <p>Un corridoio a gradini, coperto a mensola, scende per decine di metri sotto la cinta fino a un
+   serbatoio alimentato con condotti dalla sorgente Perseia: acqua garantita anche sotto assedio.
+   È uno dei vertici dell’ingegneria micenea. Scendi: il buio è parte del monumento.</p>
+   <span class="tag ipo">Licenza dichiarata</span>
+   <p>La cisterna appartiene all’ultima fase delle mura, verso il 1230–1200 a.C.: qui la anticipo di
+   qualche decennio per mostrarla insieme al resto. Percorso semplificato e raccorciato rispetto ai
+   novantanove gradini reali.</p>` },
+];
+let activeHotspot=null;
+
+/* ---------- giocatore ---------- */
+const player={ x:-160, z:0, yaw:0, pitch:0, h:1.7, speed:4.2, run:7.5 }; // yaw 0 = est, verso la Porta
+const viewState={camera:'first',pace:'walk',time:0,atmosphere:true,reconstruction:true};
+let yawTarget=player.yaw;
+const keys={};
+addEventListener('keydown',e=>{ keys[e.code]=true;
+  if(e.code==='KeyE') tryOpenPanel();
+  if(e.code==='Escape'){} });
+addEventListener('keyup',e=>keys[e.code]=false);
+
+let locked=false, started=false, paused=false;
+const startEl=document.getElementById('start'), hud=document.getElementById('hud');
+document.getElementById('enterBtn').addEventListener('click',()=>{
+  startEl.style.display='none'; hud.style.display='block'; started=true;
+  if(!IS_TOUCH) canvas.requestPointerLock && canvas.requestPointerLock();
+});
+canvas.addEventListener('click',()=>{ if(started && !IS_TOUCH && !paused) canvas.requestPointerLock&&canvas.requestPointerLock(); });
+document.addEventListener('pointerlockchange',()=>{ locked=(document.pointerLockElement===canvas); });
+document.addEventListener('mousemove',e=>{
+  if(!locked||paused) return;
+  player.yaw -= e.movementX*0.0021;
+  player.pitch -= e.movementY*0.0021;
+  player.pitch=Math.max(-1.35,Math.min(1.35,player.pitch));
+});
+
+/* touch: levetta sinistra + trascinamento destro */
+const joy={active:false,dx:0,dz:0,id:null};
+if(IS_TOUCH){
+  const joyEl=document.getElementById('joyL'), knob=document.getElementById('joyLKnob');
+  const rect=()=>joyEl.getBoundingClientRect();
+  joyEl.addEventListener('touchstart',e=>{ const t=e.changedTouches[0]; joy.active=true; joy.id=t.identifier; e.preventDefault(); },{passive:false});
+  addEventListener('touchmove',e=>{
+    for(const t of e.changedTouches){
+      if(joy.active&&t.identifier===joy.id){
+        const r=rect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+        let dx=(t.clientX-cx)/(r.width/2), dy=(t.clientY-cy)/(r.height/2);
+        const m=Math.hypot(dx,dy); if(m>1){dx/=m;dy/=m;}
+        joy.dx=dx; joy.dz=dy;
+        knob.style.transform=`translate(${dx*32}px,${dy*32}px)`;
+      } else if(lookId===t.identifier){
+        player.yaw -= (t.clientX-lookX)*0.005;
+        player.pitch=Math.max(-1.35,Math.min(1.35,player.pitch-(t.clientY-lookY)*0.005));
+        lookX=t.clientX; lookY=t.clientY;
+      }
+    }
+  },{passive:false});
+  addEventListener('touchend',e=>{
+    for(const t of e.changedTouches){
+      if(t.identifier===joy.id){ joy.active=false; joy.dx=joy.dz=0; joy.id=null;
+        document.getElementById('joyLKnob').style.transform='translate(0,0)'; }
+      if(t.identifier===lookId) lookId=null;
+    }
+  });
+  let lookId=null,lookX=0,lookY=0;
+  addEventListener('touchstart',e=>{
+    for(const t of e.changedTouches){
+      if(t.clientX>innerWidth*0.45 && lookId===null && !e.target.closest('#panel,#menu,#actBtn,#menuBtn')){
+        lookId=t.identifier; lookX=t.clientX; lookY=t.clientY;
+      }
+    }
+  },{passive:true});
+}
+
+/* ---------- pannelli e menu ---------- */
+const panel=document.getElementById('panel');
+function tryOpenPanel(){
+  if(!activeHotspot||paused) return;
+  document.getElementById('pOver').textContent=activeHotspot.over;
+  document.getElementById('pTitle').textContent=activeHotspot.name;
+  document.getElementById('pBody').innerHTML=activeHotspot.body;
+  panel.classList.add('open'); paused=true;
+  if(document.pointerLockElement) document.exitPointerLock();
+}
+document.getElementById('pClose').addEventListener('click',closePanel);
+function closePanel(){ panel.classList.remove('open'); paused=false;
+  if(!IS_TOUCH) canvas.requestPointerLock&&canvas.requestPointerLock(); }
+
+const menu=document.getElementById('menu');
+document.getElementById('menuBtn').addEventListener('click',openMenu);
+addEventListener('keydown',e=>{ if(e.code==='KeyM'&&started){ menu.style.display==='flex'?closeMenu():openMenu(); } });
+document.addEventListener('pointerlockchange',()=>{
+  if(started && !document.pointerLockElement && !paused && !IS_TOUCH && menu.style.display!=='flex' && !panel.classList.contains('open')){
+    openMenu();  // Esc dal pointer lock apre il menu
+  }
+});
+function openMenu(){ renderSlotList(); menu.style.display='flex'; paused=true;
+  if(document.pointerLockElement) document.exitPointerLock(); }
+function closeMenu(){ menu.style.display='none'; paused=false;
+  if(!IS_TOUCH) canvas.requestPointerLock&&canvas.requestPointerLock(); }
+document.getElementById('resumeBtn').addEventListener('click',closeMenu);
+document.getElementById('restartBtn').addEventListener('click',()=>{
+  player.x=-160; player.z=0; player.yaw=0; player.pitch=0; closeMenu(); });
+
+function openModal(id){const el=document.getElementById(id);if(!el)return;el.style.display='flex';paused=true;if(document.pointerLockElement)document.exitPointerLock();}
+function closeModal(el){(typeof el==='string'?document.getElementById(el):el.closest('.modal')).style.display='none';paused=false;if(!IS_TOUCH&&started)canvas.requestPointerLock&&canvas.requestPointerLock();}
+document.querySelectorAll('[data-close-modal]').forEach(b=>b.addEventListener('click',()=>closeModal(b)));
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m);}));
+document.getElementById('eraBtn').addEventListener('click',()=>openModal('eraModal'));
+document.getElementById('helpBtn').addEventListener('click',()=>openModal('helpModal'));
+document.getElementById('mapBtn').addEventListener('click',()=>openModal('mapModal'));
+document.getElementById('notesBtn').addEventListener('click',()=>{document.getElementById('notesText').value=localStorage.getItem('micene-notes')||'';openModal('notesModal');});
+document.getElementById('saveNotesBtn').addEventListener('click',()=>{localStorage.setItem('micene-notes',document.getElementById('notesText').value);closeModal('notesModal');});
+document.getElementById('clearNotesBtn').addEventListener('click',()=>{document.getElementById('notesText').value='';localStorage.removeItem('micene-notes');});
+document.getElementById('actBtn').addEventListener('click',tryOpenPanel);
+
+function setCameraMode(mode){viewState.camera=mode;document.getElementById('firstBtn').classList.toggle('active',mode==='first');document.getElementById('thirdBtn').classList.toggle('active',mode==='third');avatar.visible=mode==='third';}
+document.getElementById('firstBtn').addEventListener('click',()=>setCameraMode('first'));
+document.getElementById('thirdBtn').addEventListener('click',()=>setCameraMode('third'));
+
+document.getElementById('walkBtn').addEventListener('click',()=>{viewState.pace=viewState.pace==='walk'?'run':'walk';document.getElementById('walkBtn').classList.toggle('running',viewState.pace==='run');document.getElementById('walkBtn').title=viewState.pace==='run'?'Corsa attiva':'Passo attivo';});
+document.getElementById('reconBtn').addEventListener('click',()=>{viewState.reconstruction=!viewState.reconstruction;artisticGroup.visible=viewState.reconstruction;document.getElementById('reconBtn').classList.toggle('active',viewState.reconstruction);document.getElementById('reconLabel').textContent=viewState.reconstruction?'Ipotesi cromatica':'Struttura essenziale';});
+document.getElementById('atmoBtn').addEventListener('click',()=>{viewState.atmosphere=!viewState.atmosphere;atmosphereGroup.visible=viewState.atmosphere;scene.fog=viewState.atmosphere?new THREE.Fog(viewState.time===2?0x9a7970:0xd9d4bf,155,760):null;document.getElementById('atmoBtn').classList.toggle('active',viewState.atmosphere);});
+const TIMES=[
+  {bg:'day',sun:[-240,290,140],color:0xffe4bb,int:4.2,hemi:1.0,exp:1.08,fog:0xd9d4bf},
+  {bg:'gold',sun:[-260,150,90],color:0xffc477,int:3.4,hemi:.72,exp:1.02,fog:0xd1b894},
+  {bg:'dusk',sun:[-190,70,-140],color:0xff8d5a,int:2.1,hemi:.48,exp:.82,fog:0x9a7970}
+];
+function setTime(i){viewState.time=i%TIMES.length;const t=TIMES[viewState.time];scene.background=SKY[t.bg];sun.position.set(...t.sun);sun.color.setHex(t.color);sun.intensity=t.int;hemi.intensity=t.hemi;renderer.toneMappingExposure=t.exp;if(viewState.atmosphere)scene.fog=new THREE.Fog(t.fog,145,720);sunSprite.position.set(t.sun[0]*1.35,t.sun[1]*1.05,t.sun[2]*1.35);}
+document.getElementById('lightBtn').addEventListener('click',()=>setTime(viewState.time+1));
+
+let ambientAudio=null;
+function toggleAmbientAudio(){const btn=document.getElementById('soundBtn');if(ambientAudio){ambientAudio.source.stop();ambientAudio.ctx.close();ambientAudio=null;btn.classList.remove('active');return;}const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ctx=new AC(),duration=3,buffer=ctx.createBuffer(1,ctx.sampleRate*duration,ctx.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.22;const source=ctx.createBufferSource();source.buffer=buffer;source.loop=true;const filter=ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=620;const gain=ctx.createGain();gain.gain.value=.055;source.connect(filter).connect(gain).connect(ctx.destination);source.start();ambientAudio={ctx,source};btn.classList.add('active');}
+document.getElementById('soundBtn').addEventListener('click',toggleAmbientAudio);
+
+/* ---------- collisione e movimento ---------- */
+function collide(px,pz){
+  const inC=cisternInfo(px,pz);
+  const inCist=(inC.along>0.6 && inC.along<CIST.len-0.4 && Math.abs(inC.lat)<2.2);
+  if(inCist){
+    // dentro il corridoio: solo clamp laterale
+    const along=Math.max(0.6,Math.min(CIST.len-0.5,inC.along));
+    const latClamped=Math.max(-1.15,Math.min(1.15,inC.lat));
+    px=CIST.x0+CIST.dirx*along+(-CIST.dirz)*latClamped;
+    pz=CIST.z0+CIST.dirz*along+( CIST.dirx)*latClamped;
+    return [px,pz,true,along];
+  }
+  const R=0.55;
+  for(const s of colSegs){
+    const vx=s.bx-s.ax, vz=s.bz-s.az;
+    const wx=px-s.ax, wz=pz-s.az;
+    const L2=vx*vx+vz*vz||1e-6, L=Math.sqrt(L2);
+    let t=(wx*vx+wz*vz)/L2;
+    const tm=t*L;
+    if(s.openA && tm<0.12) continue;          // varco: estremità A a filo, nessuna capsula
+    if(s.openB && tm>L-0.12) continue;        // varco: estremità B a filo
+    t=Math.max(0,Math.min(1,t));
+    const cx=s.ax+vx*t, cz=s.az+vz*t;
+    let dx=px-cx, dz=pz-cz;
+    const d=Math.hypot(dx,dz), min=s.pad+R;
+    if(d<min && d>1e-5){ const push=(min-d); px+=dx/d*push; pz+=dz/d*push; }
+  }
+  return [px,pz,false,0];
+}
+
+/* ---------- HUD dinamico ---------- */
+const hint=document.getElementById('hint'), hintName=document.getElementById('hintName');
+const placeLabel=document.getElementById('placeLabel');
+const actBtn=document.getElementById('actBtn');
+let placeShown='';
+
+/* ---------- ciclo ---------- */
+const clock=new THREE.Clock();
+function tick(){
+  requestAnimationFrame(tick);
+  const dt=Math.min(clock.getDelta(),0.05);
+  if(started&&!paused){
+    let fw=0,st=0;
+    if(keys['KeyW']||keys['ArrowUp'])fw+=1;
+    if(keys['KeyS']||keys['ArrowDown'])fw-=1;
+    if(keys['KeyA']||keys['ArrowLeft'])st-=1;
+    if(keys['KeyD']||keys['ArrowRight'])st+=1;
+    if(IS_TOUCH){ fw=-joy.dz; st=joy.dx; }
+    const sp=(keys['ShiftLeft']||keys['ShiftRight']||viewState.pace==='run')?player.run:player.speed;
+    // yaw 0 → forward (+x); destra = (sin yaw, cos yaw)
+    const fx=Math.cos(player.yaw), fz=-Math.sin(player.yaw);
+    const rx=-fz, rz=fx;
+    const nx=player.x+(fx*fw+rx*st)*sp*dt;
+    const nz=player.z+(fz*fw+rz*st)*sp*dt;
+    const [cxp,czp,inCist,along]=collide(nx,nz);
+    player.x=cxp; player.z=czp;
+    let gy;
+    if(inCist){ gy=CIST.entryH - CIST.drop*(along/CIST.len); }
+    else gy=terrainH(player.x,player.z);
+    // camera in prima o terza persona
+    if(viewState.camera==='first'){
+      camera.position.set(player.x, gy+player.h, player.z);
+      camera.rotation.order='YXZ';
+      camera.rotation.y=player.yaw-Math.PI/2;
+      camera.rotation.x=player.pitch;
+      avatar.visible=false;
+    } else {
+      avatar.visible=true;avatar.position.set(player.x,gy,player.z);avatar.rotation.y=player.yaw-Math.PI/2;
+      const back=5.8,side=0.25,up=3.15+player.pitch*1.2;
+      camera.position.set(player.x-fx*back+rx*side,gy+up,player.z-fz*back+rz*side);
+      camera.lookAt(player.x+fx*2.2,gy+1.45+player.pitch*.7,player.z+fz*2.2);
+    }
+    // hotspot
+    activeHotspot=null;
+    let best=1e9;
+    for(const h of HOTSPOTS){
+      const d=Math.hypot(player.x-h.x,player.z-h.z);
+      if(d<h.r && d<best){ best=d; activeHotspot=h; }
+    }
+    if(activeHotspot){
+      hint.style.opacity=1; hintName.textContent=activeHotspot.name;actBtn.classList.add('hot');
+      if(placeShown!==activeHotspot.name){ placeShown=activeHotspot.name;
+        placeLabel.textContent=activeHotspot.over.split('·')[0].trim(); placeLabel.style.opacity=1; }
+    } else {
+      hint.style.opacity=0;actBtn.classList.remove('hot');
+      placeLabel.style.opacity=0; placeShown='';
+    }
+    const mp=document.getElementById('mapPlayer');if(mp){mp.setAttribute('cx',String(92+(player.x+160)*1.65));mp.setAttribute('cy',String(220-player.z*1.15));}
+    // fuoco del focolare
+    if(window.__hearthLight){ __hearthLight.intensity=1.3+Math.sin(performance.now()*0.01)*0.25+Math.random()*0.15; }
+  }
+  atmosphereGroup.children.forEach((c,i)=>{if(c!==sunSprite)c.position.x+=Math.sin(performance.now()*.00003+i)*.002;});
+  renderer.render(scene,camera);
+}
+tick();
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+
+/* ---------- avvio ---------- */
+renderSlotList();
+tryPhotos();
+if('serviceWorker' in navigator){ addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }); }
+</script>
+</body>
+</html>
